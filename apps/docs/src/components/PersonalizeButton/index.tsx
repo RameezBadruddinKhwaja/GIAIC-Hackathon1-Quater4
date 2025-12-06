@@ -1,0 +1,134 @@
+import React, { useState } from 'react';
+import { useAuth } from '../AuthProvider';
+import { useLocation } from '@docusaurus/router';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import styles from './styles.module.css';
+
+interface PersonalizeButtonProps {
+  onContentUpdate?: (personalizedMdx: string) => void;
+}
+
+export default function PersonalizeButton({ onContentUpdate }: PersonalizeButtonProps): JSX.Element | null {
+  const { siteConfig } = useDocusaurusContext();
+  const API_URL = (siteConfig.customFields?.apiUrl as string) || 'http://localhost:8000';
+  const { isAuthenticated, user, token } = useAuth();
+  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [isPersonalized, setIsPersonalized] = useState(false);
+
+  // Don't show button if not authenticated or user has no hardware profile
+  if (!isAuthenticated || !user?.hardware_profile) {
+    return null;
+  }
+
+  // Extract chapter_id from current URL path
+  // Example: /modules/module-1/ros2-fundamentals → module-1/ros2-fundamentals
+  const getChapterId = (): string | null => {
+    const path = location.pathname;
+    const match = path.match(/\/modules\/(.+)/);
+    return match ? match[1] : null;
+  };
+
+  const handlePersonalize = async () => {
+    const chapterId = getChapterId();
+    if (!chapterId) {
+      setError('Unable to determine chapter ID');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const response = await fetch(`${API_URL}/api/personalize`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          chapter_id: chapterId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Personalization failed');
+      }
+
+      const data = await response.json();
+
+      // Call parent callback if provided
+      if (onContentUpdate) {
+        onContentUpdate(data.personalized_mdx);
+      }
+
+      setSuccess(true);
+      setIsPersonalized(true);
+      setTimeout(() => setSuccess(false), 3000);
+
+      console.log(
+        `Personalized for ${data.hardware_profile}. Cache hit: ${data.cache_hit}`
+      );
+    } catch (err) {
+      console.error('Personalization error:', err);
+      setError(err.message || 'Failed to personalize content');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Get hardware label
+  const getHardwareLabel = (): string => {
+    if (user.hardware_profile === 'rtx_4090') {
+      return 'RTX 4090';
+    } else if (user.hardware_profile === 'jetson_orin_nano') {
+      return 'Jetson Orin Nano';
+    }
+    return 'Your Hardware';
+  };
+
+  return (
+    <div className={styles.container}>
+      <button
+        onClick={handlePersonalize}
+        disabled={isLoading || isPersonalized}
+        className={`${styles.button} ${isPersonalized ? styles.personalized : ''}`}
+      >
+        {isLoading ? (
+          <>
+            <span className={styles.spinner}></span>
+            Personalizing...
+          </>
+        ) : isPersonalized ? (
+          <>
+            <span className={styles.checkmark}>✓</span>
+            Personalized for {getHardwareLabel()}
+          </>
+        ) : (
+          <>
+            <span className={styles.icon}>🎯</span>
+            Personalize for {getHardwareLabel()}
+          </>
+        )}
+      </button>
+
+      {error && (
+        <div className={styles.toast + ' ' + styles.error}>
+          <span className={styles.toastIcon}>✗</span>
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className={styles.toast + ' ' + styles.success}>
+          <span className={styles.toastIcon}>✓</span>
+          Content personalized successfully!
+        </div>
+      )}
+    </div>
+  );
+}

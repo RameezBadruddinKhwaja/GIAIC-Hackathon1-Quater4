@@ -1,0 +1,50 @@
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.userEmail {
+  color: #00ff41;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signinButton,
+.signoutButton {
+  background: linear-gradient(135deg, #00ff41 0%, #00cc33 100%);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: #0d0208;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.signinButton:hover,
+.signoutButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 255, 65, 0.3);
+}
+
+.signinLink {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .userEmail {
+    display: none;
+  }
+
+  .userMenu {
+    padding: 0;
+  }
+}

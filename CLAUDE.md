@@ -23,6 +23,11 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
   - General → `history/prompts/general/`
 - ADR suggestions: when an architecturally significant decision is detected, suggest: "📋 Architectural decision detected: <brief>. Document? Run `/sp.adr <title>`." Never auto‑create ADRs; require user consent.
 
+## Project Architecture & Tech Stack (Hackathon Edition)
+- **Docs:** Docusaurus (React/MDX).
+- **RAG:** OpenAI ChatKit + FastAPI + Qdrant.
+- **Agent:** Spec-Kit Plus driven.
+
 ## Development Guidelines
 
 ### 1. Authoritative Source Mandate:
@@ -208,3 +213,6 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Recent Changes
+- 001-ai-textbook-platform: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]

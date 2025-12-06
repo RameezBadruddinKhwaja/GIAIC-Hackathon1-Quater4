@@ -31,7 +31,15 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify compliance with `.specify/memory/constitution.md`:
+
+- [ ] **Article I (SDD)**: Feature has `spec.md` and `plan.md` in place
+- [ ] **Article II (Tech Stack)**: All technology choices comply with authorized stack (Docusaurus/Qdrant/Neon/FastAPI/MCP)
+- [ ] **Article III (Protocols)**: Language protocol followed (Roman Urdu chat, English code/docs); no hallucinated APIs
+- [ ] **Article IV (Publishing)**: If docs feature, uses Docusaurus conventions, ROS 2/NVIDIA Isaac standards, Mermaid diagrams
+- [ ] **Article V (Engineering)**: No hardcoded secrets; TDD approach planned; RAG citations verified
+- [ ] **Article VI (Matrix)**: MCP servers/SDKs used for Qdrant/Neon; skills loaded as needed
+- [ ] **Article VII (Intelligence)**: PHR and ADR creation planned; work stays within `src/`, `docs/`, `specs/`
 
 ## Project Structure
 

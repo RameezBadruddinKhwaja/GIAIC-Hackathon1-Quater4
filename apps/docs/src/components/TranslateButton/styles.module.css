@@ -1,0 +1,183 @@
+.container {
+  margin: 16px 0 24px 0;
+  padding: 16px;
+  background: rgba(128, 0, 255, 0.05);
+  border: 1px solid rgba(128, 0, 255, 0.2);
+  border-radius: 12px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.button {
+  background: linear-gradient(135deg, #8000ff 0%, #6600cc 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(128, 0, 255, 0.4);
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.translatedState {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.languageBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #6600cc 0%, #4d0099 100%);
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.checkmark {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.revertButton {
+  background: rgba(128, 0, 255, 0.2);
+  border: 1px solid #8000ff;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: #8000ff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.revertButton:hover {
+  background: rgba(128, 0, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideIn 0.3s ease;
+  z-index: 10000;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.error {
+  background: #ff4444;
+  color: white;
+  border: 2px solid #cc0000;
+}
+
+.toastIcon {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 12px 0 16px 0;
+    padding: 12px;
+  }
+
+  .buttonGroup {
+    gap: 8px;
+  }
+
+  .button {
+    font-size: 12px;
+    padding: 8px 12px;
+    min-width: 150px;
+  }
+
+  .languageBadge,
+  .revertButton {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .translatedState {
+    gap: 8px;
+  }
+
+  .toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    font-size: 12px;
+  }
+}
