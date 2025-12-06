@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test:*)",
+      "Bash(cd:*)",
+      "Bash(cd /mnt/d/Rameez-Bader/Quater\\ 4\\ Hackathon/Ebook && git fetch:*)",
+      "Bash(.specify/scripts/bash/create-new-feature.sh --json --number 1 --short-name \"ai-textbook-platform\" \"Physical AI & Humanoid Robotics Textbook Platform with Docusaurus, RAG, and personalization features\")",
+      "Bash(claude mcp add:*)",
+      "Bash(npx @upstash/context7-mcp:*)",
+      "Bash(claude mcp remove:*)",
+      "Bash(~/.nvm/versions/node/v25.2.1/bin/claude mcp add --transport stdio context7 npx @upstash/context7-mcp)",
+      "Bash(~/.nvm/versions/node/v25.2.1/bin/claude mcp list)",
+      "Bash(~/.nvm/versions/node/v25.2.1/bin/claude mcp add --help)",
+      "Bash(~/.nvm/versions/node/v25.2.1/bin/claude mcp remove context7)",
+      "Bash(~/.nvm/versions/node/v25.2.1/bin/claude mcp add --transport stdio context7 -e CONTEXT7_API_KEY=ctx7sk-2db3eff4-c6bf-4874-8dfe-4ef1357a7cd9 -- npx @upstash/context7-mcp)",
+      "Bash(npx -y @modelcontextprotocol/server-github)",
+      "Bash(cat:*)",
+      "Bash(.specify/scripts/bash/create-phr.sh:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "bypassPermissions"
+  }
+}
