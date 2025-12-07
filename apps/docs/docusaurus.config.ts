@@ -12,8 +12,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://rameez-bader.github.io',
-  baseUrl: '/physical-ai-textbook/',
+  url: 'https://giaic-hackathon1-quater4.vercel.app/',
+  baseUrl: '/',
 
   organizationName: 'Rameez-Bader',
   projectName: 'physical-ai-textbook',
