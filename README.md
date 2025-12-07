@@ -13,7 +13,7 @@ AI-Native educational platform for learning Physical AI, ROS 2, NVIDIA Isaac, an
 ## Tech Stack
 
 - **Frontend**: Docusaurus v3 (React 18 + TypeScript)
-- **Backend**: FastAPI (Python 3.11+)
+- **Backend**: FastAPI (Python 3.12+)
 - **Databases**: Neon (PostgreSQL), Qdrant Cloud (Vector Store)
 - **AI**: Google Gemini 2.5 Flash via OpenAI SDK
 - **Auth**: Better-Auth
