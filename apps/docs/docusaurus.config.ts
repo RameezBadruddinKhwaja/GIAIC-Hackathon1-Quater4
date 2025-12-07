@@ -12,10 +12,10 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://your-domain.com',
-  baseUrl: '/',
+  url: 'https://rameez-bader.github.io',
+  baseUrl: '/physical-ai-textbook/',
 
-  organizationName: 'panaversity',
+  organizationName: 'Rameez-Bader',
   projectName: 'physical-ai-textbook',
 
   onBrokenLinks: 'warn',
