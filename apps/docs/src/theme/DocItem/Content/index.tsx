@@ -6,9 +6,11 @@ import TranslateButton from '@site/src/components/TranslateButton';
 export default function Content(props): JSX.Element {
   return (
     <>
-      <PersonalizeButton />
-      <TranslateButton />
       <OriginalContent {...props} />
+      <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+        <PersonalizeButton />
+        <TranslateButton />
+      </div>
     </>
   );
 }

@@ -61,6 +61,20 @@ export default function PersonalizeButton({ onContentUpdate }: PersonalizeButton
 
       const data = await response.json();
 
+      // Update DOM with personalized content
+      if (data.personalized_mdx) {
+        // Find the main article content
+        const articleContent = document.querySelector('article.markdown');
+        if (articleContent) {
+          // Create a temporary div to parse the markdown
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = data.personalized_mdx;
+
+          // Replace the article content
+          articleContent.innerHTML = tempDiv.innerHTML;
+        }
+      }
+
       // Call parent callback if provided
       if (onContentUpdate) {
         onContentUpdate(data.personalized_mdx);

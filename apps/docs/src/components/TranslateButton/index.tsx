@@ -61,6 +61,20 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
 
       const data = await response.json();
 
+      // Update DOM with translated content
+      if (data.translated_mdx) {
+        // Find the main article content
+        const articleContent = document.querySelector('article.markdown');
+        if (articleContent) {
+          // Create a temporary div to parse the markdown
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = data.translated_mdx;
+
+          // Replace the article content
+          articleContent.innerHTML = tempDiv.innerHTML;
+        }
+      }
+
       // Call parent callback if provided
       if (onContentUpdate) {
         onContentUpdate(data.translated_mdx);

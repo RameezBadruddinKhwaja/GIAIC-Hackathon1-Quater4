@@ -13,55 +13,55 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  hardwareSidebar: [
-    {
-      type: 'category',
-      label: 'Hardware Lab Guide',
-      items: ['hardware-lab/hardware-setup'],
-    },
-  ],
-
-  module1Sidebar: [
+  // Main unified sidebar with all modules
+  tutorialSidebar: [
     {
       type: 'category',
       label: 'Module 1: The Nervous System (ROS 2)',
+      collapsible: true,
+      collapsed: false,
       items: [
         'module-1/ros2-fundamentals',
         'module-1/nodes-and-topics',
       ],
     },
-  ],
-
-  module2Sidebar: [
     {
       type: 'category',
       label: 'Module 2: The Digital Twin',
+      collapsible: true,
+      collapsed: true,
       items: [
         'module-2/gazebo-simulation',
         'module-2/urdf-guides',
       ],
     },
-  ],
-
-  module3Sidebar: [
     {
       type: 'category',
       label: 'Module 3: The Brain (Isaac Sim)',
+      collapsible: true,
+      collapsed: true,
       items: [
         'module-3/isaac-sim-setup',
         'module-3/nav2-planning',
       ],
     },
-  ],
-
-  module4Sidebar: [
     {
       type: 'category',
       label: 'Module 4: VLA & Humanoids',
+      collapsible: true,
+      collapsed: true,
       items: [
         'module-4/vla-introduction',
         'module-4/voice-to-action',
       ],
+    },
+  ],
+
+  hardwareSidebar: [
+    {
+      type: 'category',
+      label: 'Hardware Lab Guide',
+      items: ['hardware-lab/hardware-setup'],
     },
   ],
 };

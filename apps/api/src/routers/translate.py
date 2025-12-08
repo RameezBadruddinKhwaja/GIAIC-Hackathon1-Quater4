@@ -81,12 +81,15 @@ async def translate_content(
         }
     """
     try:
+        # Convert target_language to lowercase for ENUM compatibility
+        target_language = request.target_language.lower()
+
         # Call translation service
         result = translate_chapter(
             db=db,
             user=current_user,
             chapter_id=request.chapter_id,
-            target_language=request.target_language
+            target_language=target_language
         )
 
         # Audit logging (FR-024 requirement)

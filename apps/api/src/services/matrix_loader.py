@@ -43,9 +43,10 @@ def load_skill(skill_name: str) -> Optional[str]:
     Returns:
         Skill content as string, or None if file not found
     """
-    # Navigate up to repo root
+    # Navigate up to repo root from apps/api/src/services
+    # apps/api/src/services -> apps/api/src -> apps/api -> apps -> root
     current_dir = os.path.dirname(__file__)
-    repo_root = os.path.abspath(os.path.join(current_dir, '../../..'))
+    repo_root = os.path.abspath(os.path.join(current_dir, '../../../../..'))
     skill_path = os.path.join(repo_root, '.claude', 'skills', f'{skill_name}.md')
 
     if os.path.exists(skill_path):
