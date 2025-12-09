@@ -13,46 +13,51 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // Main unified sidebar with all modules
+  // Main unified sidebar with all modules (13 weeks)
   tutorialSidebar: [
     {
       type: 'category',
-      label: 'Module 1: The Nervous System (ROS 2)',
+      label: 'Part 1: The Nervous System (ROS 2)',
       collapsible: true,
       collapsed: false,
       items: [
-        'module-1/ros2-fundamentals',
-        'module-1/nodes-and-topics',
+        'week-01-ros2-basics/index',
+        'week-02-nodes-topics/index',
+        'week-03-urdf-modeling/index',
+        'week-04-services-actions/index',
+        'week-05-nav2/index',
       ],
     },
     {
       type: 'category',
-      label: 'Module 2: The Digital Twin',
+      label: 'Part 2: The Digital Twin (Simulation)',
       collapsible: true,
       collapsed: true,
       items: [
-        'module-2/gazebo-simulation',
-        'module-2/urdf-guides',
+        'week-06-gazebo-sim/index',
+        'week-07-unity-sim/index',
       ],
     },
     {
       type: 'category',
-      label: 'Module 3: The Brain (Isaac Sim)',
+      label: 'Part 3: The Brain (NVIDIA Isaac)',
       collapsible: true,
       collapsed: true,
       items: [
-        'module-3/isaac-sim-setup',
-        'module-3/nav2-planning',
+        'week-08-isaac-sim-basics/index',
+        'week-09-isaac-ros/index',
+        'week-10-isaac-orbit/index',
       ],
     },
     {
       type: 'category',
-      label: 'Module 4: VLA & Humanoids',
+      label: 'Part 4: VLA & Humanoids',
       collapsible: true,
       collapsed: true,
       items: [
-        'module-4/vla-introduction',
-        'module-4/voice-to-action',
+        'week-11-vla-intro/index',
+        'week-12-droid-deployment/index',
+        'week-13-humanoid-control/index',
       ],
     },
   ],
@@ -61,7 +66,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Hardware Lab Guide',
-      items: ['hardware-lab/hardware-setup'],
+      items: [
+        'hardware-lab/rtx-4090-setup',
+        'hardware-lab/jetson-orin-nano-setup',
+        'hardware-lab/ros2-workspace-setup',
+        'hardware-lab/troubleshooting',
+      ],
     },
   ],
 };

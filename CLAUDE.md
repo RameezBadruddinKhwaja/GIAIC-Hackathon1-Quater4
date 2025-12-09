@@ -33,8 +33,12 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
 ### 1. Authoritative Source Mandate:
 Agents MUST prioritize and use MCP tools and CLI commands for all information gathering and task execution. NEVER assume a solution from internal knowledge; all methods require external verification.
 
+**Reference:** See Constitution Article III (MCP Tool Mandate) and Article VIII (Agentic Orchestration Architecture) for detailed requirements.
+
 ### 2. Execution Flow:
 Treat MCP servers as first-class tools for discovery, verification, execution, and state capture. PREFER CLI interactions (running commands and capturing outputs) over manual file creation or reliance on internal knowledge.
+
+**Orchestration Note:** This project uses a 9-subagent architecture (chapter-planner, spec-architect, pedagogical-designer, educational-validator, content-implementor, factual-verifier, assessment-architect, validation-auditor, super-orchestrator). See Constitution Article VIII for agent responsibilities and Article IX for skill-agent mappings.
 
 ### 3. Knowledge capture (PHR) for Every User Input.
 After completing requests, you **MUST** create a PHR (Prompt History Record).

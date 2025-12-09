@@ -1,0 +1,267 @@
+.playground {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h3 {
+  color: #fff;
+  margin: 0 0 8px 0;
+  font-size: 24px;
+}
+
+.header p {
+  color: #a0a0a0;
+  margin: 0;
+  font-size: 14px;
+}
+
+.controls {
+  background: #252525;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.inputGroup label {
+  display: block;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.textarea {
+  width: 100%;
+  padding: 12px;
+  background: #1e1e1e;
+  border: 1px solid #3e3e3e;
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #5755d9;
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.examplesLabel {
+  color: #a0a0a0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.exampleButton {
+  background: #3e3e3e;
+  color: #a0a0a0;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exampleButton:hover {
+  background: #4e4e4e;
+  color: #fff;
+}
+
+.optionsRow {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.languageSelector {
+  flex: 0 0 auto;
+}
+
+.languageSelector label {
+  display: block;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.select {
+  padding: 10px 16px;
+  background: #1e1e1e;
+  border: 1px solid #3e3e3e;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #5755d9;
+}
+
+.generateButton {
+  flex: 1;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #5755d9 0%, #7367f0 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.generateButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(87, 85, 217, 0.4);
+}
+
+.generateButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  background: #dc3545;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.editorContainer {
+  background: #1e1e1e;
+  border: 1px solid #3e3e3e;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.editorHeader {
+  background: #252525;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3e3e3e;
+}
+
+.editorTitle {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.editorActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButton {
+  background: #3e3e3e;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background: #4e4e4e;
+}
+
+.explanation {
+  background: #252525;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.explanation h4 {
+  color: #fff;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.explanation p {
+  color: #a0a0a0;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.tips {
+  background: #252525;
+  border-radius: 8px;
+  padding: 16px;
+  border-left: 4px solid #ffc107;
+}
+
+.tips h4 {
+  color: #fff;
+  margin: 0 0 12px 0;
+  font-size: 16px;
+}
+
+.tips ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #a0a0a0;
+  font-size: 14px;
+}
+
+.tips li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .playground {
+    padding: 16px;
+  }
+
+  .optionsRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .languageSelector {
+    flex: 1;
+  }
+
+  .examples {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .exampleButton {
+    width: 100%;
+  }
+}
