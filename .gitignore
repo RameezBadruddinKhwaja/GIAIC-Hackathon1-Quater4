@@ -47,3 +47,6 @@ coverage/
 # Build outputs
 out/
 .next/
+
+.gemini/
+gha-creds-*.json

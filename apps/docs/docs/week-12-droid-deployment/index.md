@@ -257,10 +257,11 @@ tensorboard --logdir outputs/train/
 ```
 
 **Expected training time:**
+
 - RTX 4090: 2-4 hours for 2000 epochs
 - RTX 3060: 6-8 hours
 
-  </TabItem>
+</TabItem>
 </Tabs>
 
 ## Policy Deployment

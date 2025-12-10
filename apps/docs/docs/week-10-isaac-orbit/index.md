@@ -317,8 +317,9 @@ torch.onnx.export(
   <TabItem value="rtx4090" label="RTX 4090" default>
 
 **Performance:**
+
 - 4096 parallel environments at 60 FPS
-- Full PPO training in <1 hour
+- Full PPO training in less than 1 hour
 - Real-time policy evaluation
 
 **Configuration:**

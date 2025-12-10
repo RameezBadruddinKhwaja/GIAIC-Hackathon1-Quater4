@@ -301,19 +301,21 @@ def execute_task_plan(robot, plan):
 ## Hardware Deployment Considerations
 
 <Tabs>
-  <TabItem value="sim" label="Simulation (MuJoCo)" default>
+<TabItem value="sim" label="Simulation (MuJoCo)" default>
 
 **Use Cases:**
+
 - Algorithm development
 - Safety testing
 - Data generation for RL
 
 **Performance:**
+
 - RTX 4090: 1000+ FPS for policy rollout
 - Enable parallel simulations for RL training
 
-  </TabItem>
-  <TabItem value="real" label="Real Humanoid">
+</TabItem>
+<TabItem value="real" label="Real Humanoid">
 
 **Challenges:**
 - Sim-to-real gap (friction, latency, actuation)

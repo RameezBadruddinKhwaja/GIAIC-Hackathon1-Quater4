@@ -262,22 +262,24 @@ class FibonacciActionClient(Node):
 ## Hardware Considerations
 
 <Tabs>
-  <TabItem value="rtx4090" label="RTX 4090 (Simulation)" default>
+<TabItem value="rtx4090" label="RTX 4090 (Simulation)" default>
 
 **Use Cases:**
+
 - Complex inverse kinematics services
 - High-frequency action feedback (100 Hz)
 - Multiple concurrent actions
 
-  </TabItem>
-  <TabItem value="jetson" label="Jetson Orin Nano (Edge)">
+</TabItem>
+<TabItem value="jetson" label="Jetson Orin Nano (Edge)">
 
 **Optimization:**
-- Reduce action feedback frequency (10 Hz)
+
+- Reduce action frequency (10 Hz)
 - Use services for quick queries
 - Implement cancellation for battery conservation
 
-  </TabItem>
+</TabItem>
 </Tabs>
 
 ## Key Takeaways
