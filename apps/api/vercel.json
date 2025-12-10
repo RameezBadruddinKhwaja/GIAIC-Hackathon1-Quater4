@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "name": "physical-ai-textbook-api",
+  "builds": [
+    {
+      "src": "src/main.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "src/main.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "src/main.py"
+    }
+  ],
+  "env": {
+    "PYTHON_VERSION": "3.12"
+  },
+  "regions": ["iad1"]
+}
