@@ -15,6 +15,7 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   // Main unified sidebar with all modules (13 weeks)
   tutorialSidebar: [
+    'intro',
     {
       type: 'category',
       label: 'Part 1: The Nervous System (ROS 2)',

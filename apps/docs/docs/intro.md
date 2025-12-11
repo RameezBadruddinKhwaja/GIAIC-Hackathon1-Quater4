@@ -107,7 +107,6 @@ Customize content based on your hardware profile:
 
 ### 🌍 Urdu Translation
 Translate any chapter to Urdu:
-- **Roman Urdu**: Urdu in Latin script (e.g., "Aap kaise hain?")
 - **Formal Urdu**: Academic Urdu in Nastaliq script (اردو)
 
 ## Prerequisites
