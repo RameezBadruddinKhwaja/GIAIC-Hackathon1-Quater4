@@ -10,7 +10,7 @@ interface TranslateButtonProps {
 
 export default function TranslateButton({ onContentUpdate }: TranslateButtonProps): JSX.Element | null {
   const { siteConfig } = useDocusaurusContext();
-  const API_URL = (siteConfig.customFields?.apiUrl as string) || 'http://localhost:8000';
+  const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
   const { isAuthenticated, token } = useAuth();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);

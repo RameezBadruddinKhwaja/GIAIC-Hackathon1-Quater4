@@ -24,7 +24,7 @@ interface ChatResponse {
 
 export default function ChatWidget(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
-  const API_URL = (siteConfig.customFields?.apiUrl as string) || 'http://localhost:8000';
+  const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');

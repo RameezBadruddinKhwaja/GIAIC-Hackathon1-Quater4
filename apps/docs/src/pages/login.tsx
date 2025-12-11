@@ -7,7 +7,7 @@ import styles from './login.module.css';
 
 export default function Login(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
-  const API_URL = (siteConfig.customFields?.apiUrl as string) || 'http://localhost:8000';
+  const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

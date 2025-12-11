@@ -283,7 +283,7 @@ async def github_login():
             detail="GitHub OAuth not configured"
         )
 
-    callback_url = f"{os.getenv('API_URL', 'http://localhost:8000')}/api/auth/github/callback"
+    callback_url = f"{os.getenv('API_URL', 'https://giaic-hackathon1-quater4.vercel.app')}/api/auth/github/callback"
     github_auth_url = (
         f"https://github.com/login/oauth/authorize"
         f"?client_id={GITHUB_CLIENT_ID}"
@@ -386,7 +386,7 @@ async def github_callback(code: str, db: Session = Depends(get_db)):
 
             user_json = urllib.parse.quote(json.dumps(user_data))
 
-            frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+            frontend_url = os.getenv("FRONTEND_URL", "https://giaic-hackathon1-quater4-frontend.vercel.app")
             redirect_url = f"{frontend_url}/auth/callback?token={jwt_token}&user={user_json}"
 
             return RedirectResponse(url=redirect_url)

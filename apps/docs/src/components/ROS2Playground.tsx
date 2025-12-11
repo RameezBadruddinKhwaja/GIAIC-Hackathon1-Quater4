@@ -8,7 +8,7 @@ interface ROS2PlaygroundProps {
 }
 
 export function ROS2Playground({
-  apiUrl = 'http://localhost:8000',
+  apiUrl = 'https://giaic-hackathon1-quater4.vercel.app',
   initialLanguage = 'python',
 }: ROS2PlaygroundProps) {
   const [description, setDescription] = useState('');
