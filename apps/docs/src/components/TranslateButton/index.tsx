@@ -24,11 +24,16 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
   }
 
   // Extract chapter_id from current URL path
-  // Example: /modules/module-1/ros2-fundamentals → module-1/ros2-fundamentals
+  // Example: /modules/week-01-ros2-basics/ → week-01-ros2-basics
   const getChapterId = (): string | null => {
     const path = location.pathname;
-    const match = path.match(/\/modules\/(.+)/);
-    return match ? match[1] : null;
+    // Match /modules/<chapter-id> or /modules/<chapter-id>/
+    const match = path.match(/\/modules\/([^/]+)/);
+    if (match && match[1]) {
+      // Remove trailing slashes and return clean chapter ID
+      return match[1].replace(/\/$/, '');
+    }
+    return null;
   };
 
   const handleTranslate = async (targetLanguage: 'roman_urdu' | 'formal_urdu') => {

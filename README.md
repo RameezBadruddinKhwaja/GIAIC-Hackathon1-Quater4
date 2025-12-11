@@ -233,6 +233,36 @@ For questions or feedback:
 
 ---
 
-**Built for**: GIAIC Hackathon Q4 2024
+**Built for**: GIAIC Hackathon Q4 2025
 **Target Score**: 300+/100 points 🎯
 **Status**: Production Ready ✅
+
+
+You are a Senior Full Stack Engineer. I am facing critical issues in my deployed Physical AI & Humanoid Robotics Textbook platform (Docusaurus Frontend + FastAPI Backend).
+
+Analyze the codebase and fix the following specific errors and UI/UX flaws immediately:
+
+1. **Production API Connection Error:**
+   - The Translate button triggers a `net::ERR_CONNECTION_REFUSED` error targeting `localhost:8000/api/translate/page:1`.
+   - The deployed frontend is at `https://giaic-hackathon1-quater4-frontend.vercel.app/` and the chatbot/backend is at `https://giaic-hackathon1-quater4.vercel.app/`.
+   - Ensure the production environment correctly points to the deployed API, not localhost.
+
+2. **Authentication Configuration:**
+   - Configure the correct Authorization Callback URL for BetterAuth (GitHub OAuth) to work with the production domains listed above.
+
+3. **UI/UX Design Conflicts:**
+   - **Button Overlap:** The "Translate" button is positioned directly over the Chatbot's "Close" button, making it impossible to close the chat. Fix this z-index or positioning issue.
+   - **Broken Navigation:** Clicking "Content" or "Chat" in the Navbar results in a "Page Not Found (404)" error.
+   - **Hardware Lab Layout:** In the Hardware Lab section, the Navbar gets stuck/glitched when scrolling down (sticky header issue).
+   - **Modules Visibility:** The Weeks/Modules content is not appearing in the sidebar navigation.
+   - **Text Cleanup:** Remove the static text "Roman Urdu: Urdu in Latin script (e.g., 'Aap kaise hain?')" if the feature is not active.
+
+4. **Architecture & Deployment:**
+   - Evaluate if `apps/api` should be moved from Vercel to Railway for better stability. If yes, generate the necessary configuration files (e.g., `railway.toml` or `Dockerfile`).
+
+5. **Code Hygiene:**
+   - Refactor the entire codebase to be minimalistic.
+   - Remove all comments, console logs, and unused code blocks.
+   - Ensure the build process runs without errors before pushing.
+
+Execute these fixes now.
