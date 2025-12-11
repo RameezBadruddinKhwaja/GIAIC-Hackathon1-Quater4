@@ -27,8 +27,8 @@ const config: Config = {
 
   // Custom fields for environment variables (accessible in React components)
   customFields: {
-    apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000',
-    githubClientId: process.env.BETTER_AUTH_GITHUB_CLIENT_ID || '',
+    apiUrl: process.env.REACT_APP_API_URL || process.env.API_URL || 'https://giaic-hackathon1-quater4.vercel.app',
+    githubClientId: process.env.REACT_APP_BETTER_AUTH_GITHUB_CLIENT_ID || process.env.BETTER_AUTH_GITHUB_CLIENT_ID || '',
   },
 
   // Enable Mermaid support

@@ -8,12 +8,17 @@ Note: Better-Auth Python SDK not available - using standard JWT approach.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr, validator
 from typing import Optional
 from datetime import datetime
 import logging
 import uuid
+import os
+import httpx
+import json
+import urllib.parse
 
 from ..models.user import User, AuthProvider, HardwareProfile, ProgrammingLanguage
 from ..models.database import get_db
@@ -267,3 +272,128 @@ async def submit_onboarding(
             "programming_language": current_user.programming_language.value,
         }
     }
+
+
+@router.get("/github/login")
+async def github_login():
+    GITHUB_CLIENT_ID = os.getenv("BETTER_AUTH_GITHUB_CLIENT_ID")
+    if not GITHUB_CLIENT_ID:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="GitHub OAuth not configured"
+        )
+
+    callback_url = f"{os.getenv('API_URL', 'http://localhost:8000')}/api/auth/github/callback"
+    github_auth_url = (
+        f"https://github.com/login/oauth/authorize"
+        f"?client_id={GITHUB_CLIENT_ID}"
+        f"&redirect_uri={callback_url}"
+        f"&scope=user:email"
+    )
+
+    return RedirectResponse(url=github_auth_url)
+
+
+@router.get("/github/callback")
+async def github_callback(code: str, db: Session = Depends(get_db)):
+    GITHUB_CLIENT_ID = os.getenv("BETTER_AUTH_GITHUB_CLIENT_ID")
+    GITHUB_CLIENT_SECRET = os.getenv("BETTER_AUTH_GITHUB_CLIENT_SECRET")
+
+    if not GITHUB_CLIENT_ID or not GITHUB_CLIENT_SECRET:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="GitHub OAuth not configured"
+        )
+
+    try:
+        async with httpx.AsyncClient() as client:
+            token_response = await client.post(
+                "https://github.com/login/oauth/access_token",
+                data={
+                    "client_id": GITHUB_CLIENT_ID,
+                    "client_secret": GITHUB_CLIENT_SECRET,
+                    "code": code,
+                },
+                headers={"Accept": "application/json"}
+            )
+            token_data = token_response.json()
+
+            if "error" in token_data:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"GitHub OAuth error: {token_data.get('error_description', 'Unknown error')}"
+                )
+
+            access_token = token_data.get("access_token")
+
+            user_response = await client.get(
+                "https://api.github.com/user",
+                headers={
+                    "Authorization": f"Bearer {access_token}",
+                    "Accept": "application/json"
+                }
+            )
+            github_user = user_response.json()
+
+            email_response = await client.get(
+                "https://api.github.com/user/emails",
+                headers={
+                    "Authorization": f"Bearer {access_token}",
+                    "Accept": "application/json"
+                }
+            )
+            emails = email_response.json()
+            primary_email = next((e["email"] for e in emails if e["primary"]), None)
+
+            if not primary_email:
+                primary_email = github_user.get("email")
+
+            if not primary_email:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="No email found in GitHub account"
+                )
+
+            existing_user = db.query(User).filter(User.email == primary_email).first()
+
+            if existing_user:
+                existing_user.last_login = datetime.utcnow()
+                db.commit()
+                db.refresh(existing_user)
+                user = existing_user
+            else:
+                new_user = User(
+                    id=uuid.uuid4(),
+                    email=primary_email,
+                    auth_provider=AuthProvider.GITHUB,
+                    created_at=datetime.utcnow(),
+                    last_login=datetime.utcnow()
+                )
+                db.add(new_user)
+                db.commit()
+                db.refresh(new_user)
+                user = new_user
+
+            jwt_token = create_access_token(data={"sub": str(user.id)})
+
+            user_data = {
+                "id": str(user.id),
+                "email": user.email,
+                "auth_provider": user.auth_provider.value,
+                "hardware_profile": user.hardware_profile.value if user.hardware_profile else None,
+                "programming_language": user.programming_language.value if user.programming_language else None,
+            }
+
+            user_json = urllib.parse.quote(json.dumps(user_data))
+
+            frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+            redirect_url = f"{frontend_url}/auth/callback?token={jwt_token}&user={user_json}"
+
+            return RedirectResponse(url=redirect_url)
+
+    except Exception as e:
+        logger.error(f"GitHub OAuth error: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"GitHub authentication failed: {str(e)}"
+        )
