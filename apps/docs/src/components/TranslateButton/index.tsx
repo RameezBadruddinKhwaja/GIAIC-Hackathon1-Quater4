@@ -16,7 +16,6 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isTranslated, setIsTranslated] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState<'english' | 'roman_urdu' | 'formal_urdu'>('english');
 
   // Don't show button if not authenticated
   if (!isAuthenticated) {
@@ -36,7 +35,7 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
     return null;
   };
 
-  const handleTranslate = async (targetLanguage: 'roman_urdu' | 'formal_urdu') => {
+  const handleTranslate = async () => {
     const chapterId = getChapterId();
     if (!chapterId) {
       setError('Unable to determine chapter ID');
@@ -47,7 +46,7 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
     setError(null);
 
     try {
-      const response = await fetch(`${API_URL}/api/translate`, {
+      const response = await fetch(`${API_URL}/api/translate?lang=ur`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +54,7 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
         },
         body: JSON.stringify({
           chapter_id: chapterId,
-          target_language: targetLanguage,
+          target_language: 'urdu',
         }),
       });
 
@@ -86,10 +85,9 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
       }
 
       setIsTranslated(true);
-      setCurrentLanguage(targetLanguage);
 
       console.log(
-        `Translated to ${targetLanguage}. Cache hit: ${data.cache_hit}`
+        `Translated to Urdu. Cache hit: ${data.cache_hit}`
       );
     } catch (err) {
       console.error('Translation error:', err);
@@ -106,61 +104,39 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
 
   return (
     <div className={styles.container}>
-      <div className={styles.buttonGroup}>
-        {!isTranslated ? (
-          <>
-            <button
-              onClick={() => handleTranslate('roman_urdu')}
-              disabled={isLoading}
-              className={styles.button}
-            >
-              {isLoading ? (
-                <>
-                  <span className={styles.spinner}></span>
-                  Translating...
-                </>
-              ) : (
-                <>
-                  <span className={styles.icon}>🇵🇰</span>
-                  Translate to Roman Urdu
-                </>
-              )}
-            </button>
-
-            <button
-              onClick={() => handleTranslate('formal_urdu')}
-              disabled={isLoading}
-              className={styles.button}
-            >
-              {isLoading ? (
-                <>
-                  <span className={styles.spinner}></span>
-                  Translating...
-                </>
-              ) : (
-                <>
-                  <span className={styles.icon}>اردو</span>
-                  Translate to Formal Urdu
-                </>
-              )}
-            </button>
-          </>
-        ) : (
-          <div className={styles.translatedState}>
-            <div className={styles.languageBadge}>
-              <span className={styles.checkmark}>✓</span>
-              {currentLanguage === 'roman_urdu' ? 'Roman Urdu' : 'Formal Urdu (اردو)'}
-            </div>
-            <button
-              onClick={handleRevertToEnglish}
-              className={styles.revertButton}
-            >
-              <span className={styles.icon}>🔄</span>
-              Back to English
-            </button>
+      {!isTranslated ? (
+        <button
+          onClick={handleTranslate}
+          disabled={isLoading}
+          className={styles.button}
+        >
+          {isLoading ? (
+            <>
+              <span className={styles.spinner}></span>
+              Translating...
+            </>
+          ) : (
+            <>
+              <span className={styles.icon}>اردو</span>
+              Translate to Urdu
+            </>
+          )}
+        </button>
+      ) : (
+        <div className={styles.translatedState}>
+          <div className={styles.languageBadge}>
+            <span className={styles.checkmark}>✓</span>
+            Urdu (اردو)
           </div>
-        )}
-      </div>
+          <button
+            onClick={handleRevertToEnglish}
+            className={styles.revertButton}
+          >
+            <span className={styles.icon}>🔄</span>
+            Back to English
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className={styles.toast + ' ' + styles.error}>

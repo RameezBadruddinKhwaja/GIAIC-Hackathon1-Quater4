@@ -2,306 +2,303 @@
 ========================================
 SYNC IMPACT REPORT
 ========================================
-Version Change: 4.1.0 → 5.0.0 (MAJOR)
+Version Change: 6.0.0 → 6.1.0 (PATCH)
 
-Rationale: Complete transformation to hackathon-driven orchestration architecture with Claude Subagent system.
-- Added Article VIII: AGENTIC ORCHESTRATION ARCHITECTURE with 9 specialized subagents
-- Added Article IX: SKILL SYSTEM with 23 required skills and bonus capabilities
-- Expanded Article II with comprehensive skill-agent mapping
-- Enhanced Article III with Playwright MCP usage for UI testing
-- Added detailed bonus features configuration (personalization, Urdu translation, ROS2 text-to-code)
-- Restructured from generic constitution to hackathon-optimized delivery system
+Rationale: Three targeted fixes for clarity, parser safety, and workflow enforcement.
+- FIX #1: AGENTS.md reference formatting - Added backticks for parser safety
+- FIX #2: RAG Integrity rule relocation - Moved from FastAPI Standards to Security Protocol (proper categorization)
+- FIX #3: Spec modification prohibition - Added enforcement rule to prevent direct spec file edits
 
 Modified Principles:
-- Article I: No changes in SDD fundamentals (preserved)
-- Article II: EXPANDED - Added 23+ required skills and agent-skill mapping matrix
-- Article III: ENHANCED - Added Playwright MCP for UI testing and web verification
-- Article IV: No changes in agent behavior protocols (preserved)
-- Article V: No changes in publishing standards (preserved)
-- Article VI: No changes in engineering standards (preserved)
-- Article VII: No changes in intelligence preservation (preserved)
-- Article VIII: NEW - Complete agentic orchestration architecture with 9 subagents
-- Article IX: NEW - Skill system with canonical skillsets and bonus features
+- Article I (Enforcement): ENHANCED - Added prohibition on direct spec file modification
+- Article III (Agent Protocol): CLARIFIED - Fixed AGENTS.md reference formatting (backticks added)
+- Article IV (Security Protocol): ENHANCED - Added RAG Integrity subsection with explicit rules
 
-Added Sections:
-- Article VIII (AGENTIC ORCHESTRATION ARCHITECTURE): 9 specialized subagents with clear responsibilities
-  - chapter-planner, spec-architect, pedagogical-designer, educational-validator
-  - content-implementor, factual-verifier, assessment-architect, validation-auditor, super-orchestrator
-- Article IX (SKILL SYSTEM): 23 required skills + 5 bonus skills
-  - Canonical skills: book-scaffolding, chapter-planner, quiz-generator, etc.
-  - Bonus skills: urdu-translator, user-profile-initializer, ros2-code-generator
-  - Agent-skill mapping matrix
-- Bonus Features Configuration: Personalization, Urdu, BetterAuth, RAG Chatbot, ROS2 simulator
-- Deployment Requirements: Vercel MCP for frontend/backend, GitHub MCP for version control
+Removed Content:
+- Misplaced RAG rule under FastAPI Standards (lines 187-188)
 
-Removed Sections:
-- None (all existing articles preserved)
+Added Content:
+- Article I → Enforcement: Spec workflow enforcement rule
+- Article IV → Security Protocol: RAG Integrity subsection
 
 Templates Requiring Updates:
-⚠ plan-template.md - Should reference Article VIII agent orchestration requirements
-⚠ tasks-template.md - Should incorporate agent-task assignments from Article VIII
-✅ spec-template.md - No direct references, compatible as-is
-✅ CLAUDE.md - Already references MCP mandates, compatible but could benefit from Article VIII/IX references
+✅ No template changes required (clarifications only)
 
 Follow-up TODOs:
-- Create 9 subagent files under `.claude/agents/` (chapter-planner.md, spec-architect.md, etc.)
-- Create 23+ skill files under `.claude/skills/` per Article IX requirements
-- Update CLAUDE.md to reference Article VIII orchestration and Article IX skill system
-- Create agent-skill connection configuration (cross-reference matrix)
-- Verify Playwright MCP integration for UI testing workflows
-- Document bonus features activation process (chapter toggles, Urdu translation, personalization)
+- None (patch-level fixes only)
 
 Ratified: 2025-12-03
-Last Amended: 2025-12-09 (v5.0.0 - Hackathon Orchestration Architecture)
+Last Amended: 2025-12-12 (v6.1.0 - Patch: Formatting, categorization, and workflow fixes)
 ========================================
 -->
 
-# CONSTITUTION OF THE AI-NATIVE INSTITUTE
+# CONSTITUTION OF THE AI-NATIVE TEXTBOOK PROJECT
 
 ## PREAMBLE
 
-We, the Agents of this System, commit to **Spec-Driven Engineering**. We reject guesswork. We harness the power of **Model Context Protocol (MCP)** to interact with the world, the codebase, and the knowledge bases.
+This Constitution governs the creation of a complete **AI-Native Textbook on Physical AI & Humanoid Robotics** using Docusaurus, FastAPI, RAG (Retrieval-Augmented Generation), and Claude CLI automation with specialized subagents.
 
-This constitution governs the development of the **Physical AI & Humanoid Robotics Textbook Platform** for the Panaversity Hackathon, orchestrating a multi-agent system to deliver a complete educational platform with RAG chatbot, personalization, and localization capabilities.
+We commit to **Spec-Driven Development**: no code without specification, no implementation without plan, no deployment without validation.
 
-## ARTICLE I: SPEC-DRIVEN DEVELOPMENT (SDD)
+---
 
-1.  **No Spec, No Code:** Implementation (`/sp.implement`) is forbidden without a strictly defined `spec.md` and `plan.md` in the `specs/` directory.
-2.  **Single Source of Truth:** The `specs/` folder governs the `src/` and `docs/` folders. If code deviates from the spec, the code is incorrect.
-3.  **Architectural Decisions:** All major technical choices must be recorded in an **ADR** (`history/adr/`).
+## ARTICLE I: SPEC-DRIVEN DEVELOPMENT
 
-## ARTICLE II: THE AUTHORIZED TECH STACK (Immutable)
+### Core Rules
 
-1.  **Documentation Engine:** Docusaurus v3 (React/MDX/TypeScript).
-2.  **RAG Database:** **Qdrant Cloud** (Vector Store) Free Tier.
-3.  **Primary Database:** **Neon** (Serverless PostgreSQL).
-4.  **Backend API:** FastAPI (Python 3.12+).
-5.  **Authentication:** **Better-Auth** (Bonus Requirement).
-6.  **AI Orchestration:** **OpenAI Agents SDK** (Client configured with `base_url` for Google Gemini 2.5 Flash).
-7.  **ChatKit Integration:** OpenAI ChatKit for RAG chatbot UI with contextual text selection.
-8.  **Orchestration Framework:** Claude Subagents + Skills (23+ required skills, 5+ bonus skills).
+1. **No spec → No plan**
+2. **No plan → No tasks**
+3. **No tasks → No implementation**
+4. **`.specify/specs` is source of truth**
+5. **Code MUST follow specs exactly**
+6. **Claude must update specs when new behavior is required**
+7. **Plans and tasks must explicitly reference the corresponding spec section numbers for full traceability**
 
-## ARTICLE III: MCP TOOL MANDATE (The "Matrix" Tools)
+### Enforcement
 
-*Agents MUST use the following MCP Servers for their respective domains:*
+- All implementation work requires completed `spec.md` and `plan.md` in `.specify/specs/[feature]/`
+- Code that deviates from spec is incorrect by definition
+- Spec changes require explicit approval and documentation
+- Agents MUST NOT modify any specification file directly. All specification changes must be made through Spec-Kit Plus workflows (e.g., `/sp.specify update`). Direct manual edits are prohibited.
 
-1.  **Context7 (The Librarian):**
-    - **Usage:** MUST be used to fetch the latest **Docusaurus v3**, **FastAPI**, **Neon**, **ROS 2**, **NVIDIA Isaac**, **Gazebo**, **Unity**, and **Whisper** documentation.
-    - **Rule:** Never hallucinate configuration options. Fetch the real docs via Context7 first.
-2.  **GitHub MCP (The Operator):**
-    - **Usage:** MUST be used for creating repositories, managing Pull Requests, reading issues, and triggering GitHub Pages deployment workflows.
-    - **Rule:** Do not rely on local git CLI alone for remote operations.
-3.  **Playwright (The Navigator):**
-    - **Usage:** MUST be used for verifying deployed pages, taking screenshots for documentation, UI testing of chatbot interface, and gathering web data for validation.
-    - **Rule:** All deployment verification and UI testing must use Playwright MCP to ensure consistency.
-4.  **Vercel MCP (The Deployer):**
-    - **Usage:** MUST be used for deploying frontend (Docusaurus) and backend (FastAPI RAG API).
-    - **Rule:** If mono-repo deployment not supported, deploy as separate services with proper environment variable configuration.
+---
 
-## ARTICLE IV: AGENT BEHAVIOR & PROTOCOLS
+## ARTICLE II: AUTHORIZED TECHNOLOGY STACK
 
-1.  **Language Protocol:**
-    - **Chat/Conversation:** MUST be in **Roman Urdu** (Clear, professional tone).
-    - **Code/Docs:** MUST be in **Professional US English**.
-2.  **Anti-Hallucination:**
-    - If a task involves external knowledge, **Load the Context7 Tool** immediately.
-3.  **Role Fidelity:** Stay in character. Each subagent has explicit responsibilities (see Article VIII).
-4.  **Human as Tool:** Invoke user for clarification on ambiguous requirements, unforeseen dependencies, architectural uncertainty, or completion checkpoints.
+### Core Technologies
 
-## ARTICLE V: THE PUBLISHING STANDARDS (Book Wing)
+- **Frontend**: Docusaurus v3 (React/MDX/TypeScript)
+- **Backend API**: FastAPI (Python 3.12+)
+- **Vector Database**: Qdrant Cloud (Free Tier)
+- **Primary Database**: Neon (Serverless PostgreSQL)
+- **Authentication**: BetterAuth
+- **AI Orchestration**: OpenAI Agents SDK + ChatKit UI
+- **Automation**: Claude CLI + Subagents + Skills
 
-1.  **Docusaurus Native:** Content must be structured for Docusaurus (`sidebars.js`, `:::tip`, `<Tabs>`).
-2.  **Visuals:** Complex topics must use **Mermaid.js** diagrams.
-3.  **Reference Integrity:** Use **Context7** to verify any external links or technical claims about ROS 2, NVIDIA Isaac, Gazebo, Unity, Whisper.
-4.  **Book Structure:** 13-week curriculum divided into 4 modules with learning objectives, code examples, exercises, and assessments.
-5.  **Canonical Style:** Follow canonical markdown format with intelligent reusable blocks.
+### Educational Content Stack
 
-## ARTICLE VI: THE ENGINEERING STANDARDS (Lab Wing)
+- **Robotics Framework**: ROS 2
+- **Simulation**: Gazebo + NVIDIA Isaac + Unity
+- **AI Integration**: OpenAI Whisper
 
-1.  **Security Absolute (SOC Protocol):**
-    - **Zero Hardcoding:** API Keys must use `.env`.
-    - **Sanitization:** All user inputs to the Chatbot must be sanitized.
-2.  **RAG Integrity:** The Chatbot must cite sources from the book chapters using OpenAI Agents + Qdrant + ChatKit.
-3.  **Deployment:** Deployment to **Vercel** must be automated via Vercel MCP for both frontend and backend.
-4.  **Testing:** Use Playwright MCP for UI testing and validation of deployed interfaces.
+### Constraints
 
-## ARTICLE VII: INTELLIGENCE PRESERVATION
+- No technology substitutions without constitutional amendment
+- All dependencies must be documented in specs
+- Version pinning required for production dependencies
 
-1.  **Prompt History (PHR):** Log successful prompt chains in `history/prompts/` via `/sp.phr`.
-2.  **Folder Integrity:** Do not create new root directories. Work within `src/`, `docs/`, `specs/`, `.claude/`.
-3.  **Agent Artifacts:** All subagent definitions stored in `.claude/agents/`, all skill definitions in `.claude/skills/`.
+---
 
-## ARTICLE VIII: AGENTIC ORCHESTRATION ARCHITECTURE
+## ARTICLE III: AGENT PROTOCOL
 
-The system employs **9 specialized Claude Subagents**, each with distinct responsibilities:
+### Mandatory Behaviors
 
-### 1. chapter-planner
-- **Responsibility:** Divide the textbook into 13 parts based on course weeks/modules from syllabus.
-- **Skills:** `chapter-planner`, `book-scaffolding`, `learning-objectives`
-- **Output:** Chapter breakdown with learning objectives, topics, and week assignments.
+1. **Agents MUST read entire repository before making changes**
+   - Scan `.specify/specs`, `.specify/memory/constitution.md`, `AGENTS.md`, `CLAUDE.md`
+   - Review existing implementation in `docs/`, `src/`, `apps/`
 
-### 2. spec-architect
-- **Responsibility:** Design initial book spec from provided syllabus and hackathon goals.
-- **Skills:** `mvp-builder`, `tool-selection-framework`, `technical-clarity`
-- **Output:** Complete `spec.md` and `data-model.md` for the feature.
+2. **Agents MUST respect folder structure**
+   - `.specify/specs` - Feature specifications and plans
+   - `.specify/memory` - Constitution and project memory
+   - `history/prompts` - Prompt History Records
+   - `history/adr` - Architectural Decision Records
+   - `docs/` - Docusaurus content
+   - `apps/` - Application code (frontend/backend)
 
-### 3. pedagogical-designer
-- **Responsibility:** Apply learning objectives and outcome-driven design to each chapter.
-- **Skills:** `learning-objectives`, `exercise-designer`, `assessment-builder`
-- **Output:** Chapter-level learning outcomes, exercises, and assessment criteria.
+3. **Agents MUST NOT delete or overwrite existing files without diff reasoning**
+   - Provide clear rationale for any destructive changes
+   - Preserve working functionality
 
-### 4. educational-validator
-- **Responsibility:** Ensure content matches learning outcomes and core robotics topics.
-- **Skills:** `validation-auditor`, `technical-clarity`, `canonical-format-checker`
-- **Output:** Validation reports confirming alignment with learning objectives.
+4. **Agents MUST ask for clarification when requirements are ambiguous**
+   - Use AskUserQuestion tool for unclear specs
+   - Document assumptions in specs when clarifications received
 
-### 5. content-implementor
-- **Responsibility:** Write rich, agent-friendly markdown using canonical styles.
-- **Skills:** `book-scaffolding`, `concept-scaffolding`, `code-example-generator`, `image-generator`
-- **Output:** Fully-formatted Docusaurus MDX files with diagrams, code tabs, and exercises.
+5. **Agents MUST avoid hallucination**
+   - Use MCP (Model Context Protocol) tools for external documentation
+   - Verify all API syntax and library usage
+   - Never invent APIs, endpoints, or configurations
 
-### 6. factual-verifier
-- **Responsibility:** Validate every chapter for accuracy, especially for ROS 2, Isaac, Gazebo, Unity, Whisper.
-- **Skills:** `technical-clarity`, `canonical-format-checker`, Context7 MCP integration
-- **Output:** Verification reports with citations from authoritative documentation.
+6. **Agents MUST produce clean, consistent, deterministic output**
+   - Follow established code patterns
+   - Maintain consistent formatting
+   - Ensure reproducible builds
 
-### 7. assessment-architect
-- **Responsibility:** Add quizzes, assignments, and challenges per module.
-- **Skills:** `quiz-generator`, `assessment-builder`, `exercise-designer`
-- **Output:** Interactive quizzes, coding challenges, and module assessments.
+Before performing any action, agents MUST load and follow `AGENTS.md` including:
+- subagent orchestration rules
+- skill definitions
+- agent responsibilities
 
-### 8. validation-auditor
-- **Responsibility:** Run style/format validation and correctness checks across book.
-- **Skills:** `validation-auditor`, `canonical-format-checker`, Playwright MCP integration
-- **Output:** Comprehensive audit reports with actionable fixes.
+Agents MUST NOT create new top-level folders. Only the following root folders are allowed:
+.specify, docs, apps, history, .claude
 
-### 9. super-orchestrator
-- **Responsibility:** Connect all agents to build, write, validate, and finalize content.
-- **Skills:** All skills, MCP orchestration, deployment coordination
-- **Output:** Complete textbook platform with RAG chatbot, authentication, and personalization deployed to production.
+Agents MUST generate a diff and explanation before modifying or deleting any existing file.
 
-## ARTICLE IX: SKILL SYSTEM
+Agents MUST verify any external configuration or API usage via Context7 MCP.
+Agents MUST use Vercel MCP, GitHub MCP, or Playwright MCP when required and not invent any commands or endpoints.
 
-### Required Canonical Skills (23+)
+---
 
-1.  **book-scaffolding** - Generate Docusaurus project structure with sidebars, frontmatter
-2.  **chapter-planner** - Divide curriculum into modules, weeks, and learning paths
-3.  **concept-scaffolding** - Create conceptual frameworks for technical topics
-4.  **summary-generator** - Generate chapter summaries and TL;DR sections
-5.  **quiz-generator** - Create interactive quizzes with multiple-choice and code challenges
-6.  **technical-clarity** - Ensure technical accuracy and clear explanations
-7.  **canonical-format-checker** - Validate markdown format against canonical style
-8.  **assessment-builder** - Design comprehensive assessments with rubrics
-9.  **mvp-builder** - Identify and implement minimum viable product features
-10. **learning-objectives** - Define clear, measurable learning outcomes
-11. **docusaurus-deployer** - Deploy Docusaurus sites to Vercel via MCP
-12. **prompt-template-designer** - Create reusable prompt templates for agents
-13. **code-example-generator** - Generate accurate ROS 2/Python/C++ code examples
-14. **exercise-designer** - Create hands-on exercises and coding challenges
-15. **frontend-design** - Design React components and UI/UX patterns
-16. **validation-auditor** - Comprehensive validation of content, format, and functionality
-17. **skill-creator** - Meta-skill for creating new skills as needed
-18. **playwright-test-runner** - Run UI tests via Playwright MCP
-19. **image-generator** - Generate concept diagrams and visual aids
-20. **ux-evaluator** - Evaluate user experience and interface usability
-21. **tool-selection-framework** - Select appropriate tools/frameworks for requirements
-22. **notebooklm-slides** - Generate presentation slides from content (optional)
-23. **session-intelligence-harvester** - Collect and apply user context for personalization
+## ARTICLE IV: ENGINEERING STANDARDS
 
-### Bonus Skills (5+)
+### Language & Communication
 
-1.  **urdu-translator** - Translate content to Urdu (Roman/Formal) with code preservation
-2.  **user-profile-initializer** - Handle BetterAuth signup/signin with tech background collection
-3.  **ros2-code-generator** - Text-to-code for ROS2 commands (e.g., "Pick up object" → Python ROS2 code)
-4.  **rag-chatbot-integrator** - Integrate OpenAI Agents + Qdrant + ChatKit for contextual RAG
-5.  **personalization-engine** - Hardware-aware content adaptation via chapter-level toggles
+- **Code and documentation**: Professional English
+- **Conversation**: English or Roman Urdu (as preferred)
+- **Comments**: English only
 
-### Agent-Skill Mapping Matrix
+### Docusaurus Requirements
 
-| Agent | Primary Skills | Secondary Skills |
-|-------|---------------|------------------|
-| chapter-planner | chapter-planner, book-scaffolding | learning-objectives |
-| spec-architect | mvp-builder, tool-selection-framework | technical-clarity |
-| pedagogical-designer | learning-objectives, exercise-designer | assessment-builder |
-| educational-validator | validation-auditor, technical-clarity | canonical-format-checker |
-| content-implementor | book-scaffolding, code-example-generator | image-generator, concept-scaffolding |
-| factual-verifier | technical-clarity, canonical-format-checker | Context7 MCP |
-| assessment-architect | quiz-generator, assessment-builder | exercise-designer |
-| validation-auditor | validation-auditor, playwright-test-runner | canonical-format-checker |
-| super-orchestrator | ALL SKILLS | MCP orchestration |
+- **Format**: MDX (Markdown + JSX)
+- **Structure**: Standard Docusaurus conventions
+- **Components**: Use Docusaurus built-in components (Tabs, Admonitions, etc.)
+- **Navigation**: Properly configured `sidebars.js`
+- **Frontend (Docusaurus) and Backend (FastAPI) must remain isolated and deployable independently. No cross-runtime imports or shared build steps
 
-## ARTICLE X: BONUS FEATURES CONFIGURATION
+### FastAPI Standards
 
-To earn the full **+200 bonus points**, the following features MUST be implemented:
+- **Project Layout**: Standard FastAPI structure
+  - `app/main.py` - Application entry point
+  - `app/api/` - API routes
+  - `app/models/` - Data models
+  - `app/services/` - Business logic
+- **Type Hints**: Required for all function signatures
+- **Documentation**: OpenAPI/Swagger auto-generation
 
-### 1. Chapter-Level Personalization (50 points)
-- Use `session-intelligence-harvester` skill
-- Collect user hardware context (RTX 4090 vs Jetson Orin Nano)
-- Adapt code examples and performance recommendations per chapter
-- Toggle via chapter frontmatter and user profile
+### Security Protocol
 
-### 2. Urdu Translation (50 points)
-- Use `urdu-translator` skill
-- Implement chapter-level toggle for Roman Urdu / Formal Urdu
-- Preserve code blocks, technical terms, and API references in English
-- Store translations in parallel MDX files
+- **No hardcoded secrets**: All sensitive keys in `.env` files
+- **Environment Variables**: Use `.env.example` for templates
+- **Git Security**: `.env` files MUST be in `.gitignore`
+- **Code Review**: No API keys, tokens, or credentials in committed code
+- **RAG Citations**: Chatbot must only cite book content sources
+- **Input Sanitization**: All user inputs must be validated and sanitized
 
-### 3. BetterAuth Integration (50 points)
-- Use `user-profile-initializer` skill
-- Implement Email + GitHub OAuth signup/signin
-- Collect user tech background (beginner/intermediate/advanced)
-- Store user preferences in Neon PostgreSQL
+### RAG Integrity
 
-### 4. RAG Chatbot with Contextual Selection (50 points)
-- Use `rag-chatbot-integrator` skill
-- Integrate OpenAI Agents SDK + Qdrant + ChatKit
-- Allow users to select text and ask questions with context
-- Cite chapter sources in all responses
+- RAG chatbot MUST strictly cite book content only.
+- External knowledge is forbidden unless explicitly defined in specs.
 
-### 5. ROS2 Text-to-Code Simulator (Bonus)
-- Use `ros2-code-generator` skill
-- Natural language input: "Pick up the red cube"
-- Generated output: Working Python ROS2 code snippet
-- Display in interactive code playground
+### Testing Requirements
 
-## ARTICLE XI: DEPLOYMENT REQUIREMENTS
+- **Testing before deployment**: All features tested before merge
+- **Test Coverage**: Critical paths must have automated tests
+- **Manual Validation**: User-facing features validated manually
 
-### Frontend Deployment (Docusaurus)
-- Use **Vercel MCP** to deploy frontend to Vercel
-- Configure build command: `cd apps/docs && npm run build`
-- Set output directory: `apps/docs/build`
-- Enable automatic deployments on push to `main`
+### Deployment Standards
 
-### Backend Deployment (FastAPI RAG API)
-- Use **Vercel MCP** to deploy backend to Vercel
-- If mono-repo not supported, deploy as separate service
-- Configure Python runtime and FastAPI entry point
-- Set environment variables via Vercel MCP (Neon, Qdrant, OpenAI API keys)
+- **Build Verification**: `npm run build` must succeed before deployment
+- **Environment Separation**: Dev/staging/production environments clearly separated
+- **Deployment Automation**: Use CI/CD for consistent deployments
+- **Rollback Plan**: All deployments must be reversible
 
-### GitHub Integration
-- Use **GitHub MCP** to commit and push all content to GitHub
-- Enable GitHub Pages for additional hosting option
-- Configure automated deployment workflows
+---
 
-### Testing & Validation
-- Use **Playwright MCP** for UI testing of deployed interfaces
-- Verify chatbot functionality, authentication flows, and content rendering
-- Generate screenshots for documentation
+## ARTICLE V: BOOK PUBLISHING REQUIREMENTS
+
+### Chapter Structure
+
+Each chapter MUST follow this canonical structure:
+
+1. **Title** - Clear, descriptive chapter name
+2. **Introduction** - Chapter overview and learning objectives
+3. **Concepts** - Theoretical foundations and explanations
+4. **Code Examples** - Practical, executable code samples
+5. **Exercises** - Hands-on practice activities
+6. **Quiz** - Knowledge validation questions
+7. **Summary** - Key takeaways and next steps
+
+### Content Standards
+
+- **MDX Format**: All content in Docusaurus-compatible MDX
+- **Component Usage**: Use standard Docusaurus components
+- **No Experimental Tech**: Avoid bleeding-edge or unstable dependencies
+- **Proper Layout**: Content in `/docs/*` following Docusaurus conventions
+- **Build Compatibility**: All content must build with `npm run build`
+
+### Quality Requirements
+
+- **Technical Accuracy**: All code examples must be verified
+- **Clarity**: Explanations must be clear and accessible
+- **Consistency**: Consistent terminology and style throughout
+- **Diagrams**: Complex concepts visualized with Mermaid.js or images
+
+---
+
+## ARTICLE VI: BONUS FEATURES
+
+The following features provide additional value beyond core textbook functionality:
+
+### High-Level Features List
+
+1. **Urdu Translation** - Chapter-level translation toggle
+2. **Content Personalization** - Adaptive content based on user background
+3. **BetterAuth Integration** - Signup/signin with user profiling
+4. **ROS2 Code Examples** - Practical robotics code samples
+5. **RAG Chatbot** - Embedded question-answering system
+
+### Implementation Notes
+
+- Feature specifications live in `.specify/specs/[feature]/`
+- Implementation details defined in individual feature plans
+- Agent/skill mappings documented in `AGENTS.md`
+- Each feature must follow full spec-driven development cycle
+
+---
+
+## ARTICLE VII: GOVERNANCE & CHANGE RULES
+
+### Decision Documentation
+
+- **Major Decisions**: All architectural decisions documented in ADRs (`history/adr/`)
+- **Spec Updates**: All requirement changes reflected in specs
+- **Constitutional Amendments**: Constitution changes require explicit approval
+
+### Change Management
+
+- **Constitutional Compliance**: All updates must align with Constitution
+- **Backward Compatibility**: Claude must not break existing working features
+- **Change Authorization**: Claude must not modify Constitution without explicit request
+
+### Security Governance
+
+- **API Key Protection**: Never commit API keys to GitHub
+- **Code Review**: Security-sensitive changes require careful review
+- **Best Practices**: Follow OWASP security guidelines
+- **Vulnerability Remediation**: Security issues addressed promptly
+
+### Version Control
+
+- **Constitution Versioning**: Semantic versioning (MAJOR.MINOR.PATCH)
+- **Change Tracking**: All changes logged in Sync Impact Report
+- **Amendment History**: Ratification and amendment dates maintained
 
 ---
 
 ## GOVERNANCE
 
-This constitution supersedes all other project instructions.
-Any deviation requires a documented amendment with rationale and impact analysis.
-All future specifications must explicitly declare compliance with this constitution.
+### Authority
 
-**Version**: 5.0.0
+This Constitution supersedes all other project instructions except where explicitly deferred to `AGENTS.md` for agent/skill implementation details.
+
+### Amendments
+
+Any deviation requires:
+1. Documented amendment with rationale
+2. Impact analysis across templates and workflows
+3. Updated version number following semantic versioning
+4. User approval for constitutional changes
+
+### Compliance
+
+All future specifications, plans, and tasks must explicitly declare compliance with this Constitution.
+
+---
+
+**Version**: 6.1.0
 **Ratified**: 2025-12-03
-**Last Amended**: 2025-12-09 (Major Amendment: Hackathon Orchestration Architecture)
+**Last Amended**: 2025-12-12 (Patch Amendment: Formatting, categorization, and workflow fixes)
 
 ---
 
 **System Instruction:**
-This Constitution is effective immediately. All Agents must read this file before executing any command.
-The super-orchestrator agent is responsible for coordinating all subagents and ensuring constitutional compliance.
+This Constitution is effective immediately. All agents must read this file and `AGENTS.md` before executing any command. Agents are responsible for ensuring constitutional compliance in all work.

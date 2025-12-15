@@ -220,3 +220,6 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 
 ## Recent Changes
 - 001-ai-textbook-platform: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+
+
+@AGENTS.md

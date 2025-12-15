@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { useAuth } from '../AuthProvider';
 import styles from './styles.module.css';
 
 interface Message {
@@ -22,14 +23,20 @@ interface ChatResponse {
   skills_loaded: string[];
 }
 
-export default function ChatWidget(): JSX.Element {
+export default function ChatWidget(): JSX.Element | null {
   const { siteConfig } = useDocusaurusContext();
+  const { isAuthenticated } = useAuth();
   const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // ChatWidget MUST NOT render if user is not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
