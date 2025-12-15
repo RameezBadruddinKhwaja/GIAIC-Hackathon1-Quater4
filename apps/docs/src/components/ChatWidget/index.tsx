@@ -33,11 +33,6 @@ export default function ChatWidget(): JSX.Element | null {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // ChatWidget MUST NOT render if user is not authenticated
-  if (!isAuthenticated) {
-    return null;
-  }
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -101,6 +96,11 @@ export default function ChatWidget(): JSX.Element | null {
       sendMessage();
     }
   };
+
+  // ChatWidget MUST NOT render if user is not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <>
