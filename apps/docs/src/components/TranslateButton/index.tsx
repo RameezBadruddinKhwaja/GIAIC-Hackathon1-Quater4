@@ -32,8 +32,13 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
 
   const handleTranslate = async () => {
     const chapterId = getChapterId();
+
+    // Enhanced logging
+    console.log('Current pathname:', location.pathname);
+    console.log('Extracted chapter_id:', chapterId);
+
     if (!chapterId) {
-      setError('Unable to determine chapter ID');
+      setError(`Unable to determine chapter ID from URL: ${location.pathname}`);
       return;
     }
 
@@ -41,6 +46,8 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
     setError(null);
 
     try {
+      console.log('Sending translation request with chapter_id:', chapterId);
+
       const response = await fetch(`${API_URL}/api/translate?lang=ur`, {
         method: 'POST',
         headers: {
@@ -55,7 +62,8 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || 'Translation failed');
+        console.error('API Error Response:', errorData);
+        throw new Error(errorData.detail || errorData.message || 'Translation failed');
       }
 
       const data = await response.json();
@@ -84,9 +92,10 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
       console.log(
         `Translated to Urdu. Cache hit: ${data.cache_hit}`
       );
-    } catch (err) {
+    } catch (err: any) {
       console.error('Translation error:', err);
-      setError(err.message || 'Failed to translate content');
+      const errorMessage = err?.message || err?.toString() || 'Failed to translate content';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
