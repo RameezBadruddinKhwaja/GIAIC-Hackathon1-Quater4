@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "name": "physical-ai-textbook-platform",
+  "builds": [
+    {
+      "src": "apps/docs/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "apps/docs/build"
+      }
+    },
+    {
+      "src": "apps/api/src/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "apps/api/src/main.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "apps/docs/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}
