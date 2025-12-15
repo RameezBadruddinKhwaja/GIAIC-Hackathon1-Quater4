@@ -30,7 +30,16 @@ def run_migrations():
 
     try:
         # Create Alembic configuration
-        alembic_cfg = Config("apps/api/alembic.ini")
+        # Get the absolute path to alembic.ini
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        api_dir = os.path.dirname(script_dir)
+        alembic_ini_path = os.path.join(api_dir, "alembic.ini")
+
+        if not os.path.exists(alembic_ini_path):
+            print(f"ERROR: alembic.ini not found at {alembic_ini_path}")
+            return False
+
+        alembic_cfg = Config(alembic_ini_path)
 
         # Run migrations
         print("Running database migrations...")
