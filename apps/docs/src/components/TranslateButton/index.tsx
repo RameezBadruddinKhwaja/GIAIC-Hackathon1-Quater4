@@ -17,11 +17,6 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
   const [error, setError] = useState<string | null>(null);
   const [isTranslated, setIsTranslated] = useState(false);
 
-  // Don't show button if not authenticated
-  if (!isAuthenticated) {
-    return null;
-  }
-
   // Extract chapter_id from current URL path
   // Example: /modules/week-01-ros2-basics/ → week-01-ros2-basics
   const getChapterId = (): string | null => {
@@ -101,6 +96,11 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
     // Reload page to get original English content
     window.location.reload();
   };
+
+  // Don't show button if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>
