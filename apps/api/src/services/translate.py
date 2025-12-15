@@ -191,7 +191,7 @@ def fetch_original_content(chapter_id: str) -> str:
     Fetch original markdown content from Docusaurus docs directory.
 
     Args:
-        chapter_id: Chapter identifier
+        chapter_id: Chapter identifier (e.g., "intro", "week-01-ros2-basics/index")
 
     Returns:
         Original markdown content
@@ -199,19 +199,33 @@ def fetch_original_content(chapter_id: str) -> str:
     Raises:
         FileNotFoundError: If chapter file doesn't exist
     """
+    # From apps/api/src/services -> ../../docs/docs
     current_dir = os.path.dirname(__file__)
-    docs_dir = os.path.abspath(os.path.join(current_dir, '../../../docs/docs'))
-    file_path = os.path.join(docs_dir, f"{chapter_id}.md")
+    src_dir = os.path.dirname(current_dir)  # apps/api/src
+    api_dir = os.path.dirname(src_dir)  # apps/api
+    apps_dir = os.path.dirname(api_dir)  # apps
+    docs_dir = os.path.join(apps_dir, 'docs', 'docs')
 
-    if not os.path.exists(file_path):
-        logger.error(f"Chapter file not found: {file_path}")
-        raise FileNotFoundError(f"Chapter not found: {chapter_id}")
+    # Try multiple file path patterns
+    possible_paths = [
+        os.path.join(docs_dir, f"{chapter_id}.md"),  # e.g., intro.md
+        os.path.join(docs_dir, f"{chapter_id}.mdx"),  # e.g., intro.mdx
+        os.path.join(docs_dir, chapter_id, "index.md"),  # e.g., week-01-ros2-basics/index.md
+        os.path.join(docs_dir, chapter_id, "index.mdx"),  # e.g., week-01-ros2-basics/index.mdx
+    ]
 
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+    for file_path in possible_paths:
+        if os.path.exists(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            logger.info(f"Fetched original content for translation: {chapter_id} from {file_path}")
+            return content
 
-    logger.info(f"Fetched original content for translation: {chapter_id}")
-    return content
+    # If no file found, log all attempts
+    logger.error(f"Chapter file not found for '{chapter_id}'. Tried paths:")
+    for path in possible_paths:
+        logger.error(f"  - {path}")
+    raise FileNotFoundError(f"Chapter not found: {chapter_id}. Tried {len(possible_paths)} possible paths.")
 
 
 def translate_with_gemini(

@@ -61,9 +61,27 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API Error Response:', errorData);
-        throw new Error(errorData.detail || errorData.message || 'Translation failed');
+        let errorMessage = 'Translation failed';
+        try {
+          // Clone response to read it twice if needed
+          const responseClone = response.clone();
+          const responseText = await responseClone.text();
+          console.error('API Error Response (raw):', responseText);
+
+          const errorData = await response.json();
+          console.error('API Error Response (parsed):', errorData);
+
+          // Extract error message from various possible formats
+          errorMessage = errorData.detail ||
+                        errorData.message ||
+                        errorData.error ||
+                        (responseText.length < 200 ? responseText : JSON.stringify(errorData));
+        } catch (parseError) {
+          // If JSON parsing fails, use status text
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+          console.error('Failed to parse error response:', parseError);
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
