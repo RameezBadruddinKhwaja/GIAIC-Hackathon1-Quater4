@@ -168,15 +168,16 @@ def main():
     print("Content Ingestion Script")
     print("=" * 60)
 
-    # Determine docs directory
-    docs_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'docs',
-        'docs'
-    )
+    # Determine docs directory - fixed path for monorepo structure
+    # From apps/api/scripts/ingest.py -> ../../docs/docs
+    api_dir = os.path.dirname(os.path.dirname(__file__))  # apps/api
+    apps_dir = os.path.dirname(api_dir)  # apps
+    docs_dir = os.path.join(apps_dir, 'docs', 'docs')
 
     if not os.path.exists(docs_dir):
         print(f"✗ Docs directory not found: {docs_dir}")
+        print(f"  Current script location: {__file__}")
+        print(f"  Calculated docs path: {docs_dir}")
         return
 
     print(f"\nDocs directory: {docs_dir}")
