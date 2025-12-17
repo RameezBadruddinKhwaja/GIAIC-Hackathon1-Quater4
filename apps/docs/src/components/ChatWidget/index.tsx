@@ -7,26 +7,29 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   citations?: Citation[];
-  skills_loaded?: string[];
+  contextUsed?: number;
 }
 
 interface Citation {
-  chapter_id: string;
   title: string;
-  content_snippet: string;
+  module: string;
+  week: string;
   chapter_url: string;
+  snippet: string;
 }
 
 interface ChatResponse {
-  response_text: string;
+  answer: string;
   citations: Citation[];
-  skills_loaded: string[];
+  model: string;
+  context_used: number;
 }
 
 export default function ChatWidget(): JSX.Element | null {
   const { siteConfig } = useDocusaurusContext();
   const { isAuthenticated } = useAuth();
   const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -54,27 +57,32 @@ export default function ChatWidget(): JSX.Element | null {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/chat`, {
+      const response = await fetch(`${API_URL}/api/chat/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           query: userMessage.content,
+          conversation_history: messages.map(m => ({
+            role: m.role,
+            content: m.content
+          }))
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
       }
 
       const data: ChatResponse = await response.json();
 
       const assistantMessage: Message = {
         role: 'assistant',
-        content: data.response_text,
+        content: data.answer,
         citations: data.citations,
-        skills_loaded: data.skills_loaded,
+        contextUsed: data.context_used
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -82,7 +90,7 @@ export default function ChatWidget(): JSX.Element | null {
       console.error('Chat error:', error);
       const errorMessage: Message = {
         role: 'assistant',
-        content: `Sorry, I encountered an error. Please make sure the API server is running on ${API_URL}`,
+        content: `Sorry, I encountered an error: ${error.message}. Please ensure the API server is configured correctly.`,
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
@@ -97,22 +105,23 @@ export default function ChatWidget(): JSX.Element | null {
     }
   };
 
-  // ChatWidget MUST NOT render if user is not authenticated
+  // Only render if user is authenticated
   if (!isAuthenticated) {
     return null;
   }
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Chat Button */}
       <button
         className={`${styles.floatingButton} ${isOpen ? styles.hidden : ''}`}
         onClick={() => setIsOpen(true)}
-        aria-label="Open AI Chat"
+        aria-label="Open AI Chat Assistant"
+        title="Ask AI about Physical AI & Robotics"
       >
         <svg
-          width="24"
-          height="24"
+          width="28"
+          height="28"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -121,6 +130,9 @@ export default function ChatWidget(): JSX.Element | null {
             d="M12 2C6.48 2 2 6.48 2 12C2 13.93 2.6 15.73 3.61 17.23L2 22L6.77 20.39C8.27 21.4 10.07 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z"
             fill="currentColor"
           />
+          <circle cx="9" cy="12" r="1" fill="white"/>
+          <circle cx="12" cy="12" r="1" fill="white"/>
+          <circle cx="15" cy="12" r="1" fill="white"/>
         </svg>
       </button>
 
@@ -130,26 +142,39 @@ export default function ChatWidget(): JSX.Element | null {
           {/* Header */}
           <div className={styles.chatHeader}>
             <div className={styles.headerContent}>
-              <span className={styles.headerTitle}>Matrix AI Tutor</span>
+              <span className={styles.headerTitle}>🤖 AI Tutor</span>
               <span className={styles.headerSubtitle}>Physical AI & Robotics</span>
             </div>
             <button
               className={styles.closeButton}
               onClick={() => setIsOpen(false)}
               aria-label="Close chat"
+              title="Close chat"
             >
               ✕
             </button>
           </div>
 
-          {/* Messages */}
+          {/* Messages Container */}
           <div className={styles.messagesContainer}>
             {messages.length === 0 && (
               <div className={styles.emptyState}>
-                <p>👋 Welcome to the Matrix AI Tutor!</p>
-                <p>Ask me anything about Physical AI, ROS 2, NVIDIA Isaac, or Humanoid Robotics.</p>
+                <div className={styles.emptyIcon}>💬</div>
+                <p className={styles.emptyTitle}>Welcome to AI Tutor!</p>
+                <p className={styles.emptyText}>
+                  Ask me anything about Physical AI, ROS 2, NVIDIA Isaac, Humanoid Robotics, or any content from the textbook.
+                </p>
+                <div className={styles.exampleQuestions}>
+                  <p className={styles.examplesLabel}>Try asking:</p>
+                  <ul>
+                    <li>"What is VSLAM?"</li>
+                    <li>"Explain ROS 2 nodes and topics"</li>
+                    <li>"How does Isaac Sim work?"</li>
+                  </ul>
+                </div>
               </div>
             )}
+
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -158,66 +183,81 @@ export default function ChatWidget(): JSX.Element | null {
                 }`}
               >
                 <div className={styles.messageContent}>
-                  {message.content}
+                  <div className={styles.messageText}>{message.content}</div>
+
+                  {/* Context Badge */}
+                  {message.contextUsed !== undefined && message.contextUsed > 0 && (
+                    <div className={styles.contextBadge}>
+                      📚 {message.contextUsed} source{message.contextUsed > 1 ? 's' : ''} used
+                    </div>
+                  )}
+
+                  {/* Citations */}
+                  {message.citations && message.citations.length > 0 && (
+                    <div className={styles.citations}>
+                      <div className={styles.citationsLabel}>📖 Sources:</div>
+                      <div className={styles.citationsList}>
+                        {message.citations.map((citation, idx) => (
+                          <a
+                            key={idx}
+                            href={citation.chapter_url}
+                            className={styles.citation}
+                            onClick={() => setIsOpen(false)}
+                            title={`Go to ${citation.title}`}
+                          >
+                            <div className={styles.citationHeader}>
+                              <span className={styles.citationTitle}>{citation.title}</span>
+                              <span className={styles.citationMeta}>
+                                {citation.module} › {citation.week}
+                              </span>
+                            </div>
+                            <div className={styles.citationSnippet}>
+                              {citation.snippet}
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-
-                {/* Matrix Skills Loaded */}
-                {message.skills_loaded && message.skills_loaded.length > 0 && (
-                  <div className={styles.skillsLoaded}>
-                    <span className={styles.matrixIcon}>⚡</span>
-                    Matrix Skills: {message.skills_loaded.join(', ')}
-                  </div>
-                )}
-
-                {/* Citations */}
-                {message.citations && message.citations.length > 0 && (
-                  <div className={styles.citations}>
-                    <div className={styles.citationsLabel}>📚 Sources:</div>
-                    {message.citations.map((citation, idx) => (
-                      <a
-                        key={idx}
-                        href={citation.chapter_url}
-                        className={styles.citation}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <div className={styles.citationTitle}>{citation.title}</div>
-                        <div className={styles.citationSnippet}>
-                          {citation.content_snippet}
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                )}
               </div>
             ))}
+
+            {/* Loading Indicator */}
             {isLoading && (
               <div className={`${styles.message} ${styles.assistantMessage}`}>
-                <div className={styles.loadingDots}>
-                  <span></span>
-                  <span></span>
-                  <span></span>
+                <div className={styles.loadingContainer}>
+                  <div className={styles.loadingDots}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <span className={styles.loadingText}>Thinking...</span>
                 </div>
               </div>
             )}
+
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
+          {/* Input Area */}
           <div className={styles.inputContainer}>
             <textarea
               className={styles.input}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask about ROS 2, SLAM, Jetson, Isaac Sim..."
+              placeholder="Ask about ROS 2, Isaac Sim, VSLAM..."
               rows={2}
               disabled={isLoading}
+              maxLength={500}
             />
             <button
               className={styles.sendButton}
               onClick={sendMessage}
               disabled={!input.trim() || isLoading}
               aria-label="Send message"
+              title="Send message"
             >
               <svg
                 width="20"
