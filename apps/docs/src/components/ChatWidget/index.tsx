@@ -88,9 +88,29 @@ export default function ChatWidget(): JSX.Element | null {
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Chat error:', error);
+
+      // Provide user-friendly error messages
+      let errorMsg = 'An unexpected error occurred.';
+      if (error instanceof Error) {
+        errorMsg = error.message;
+      } else if (error.message) {
+        errorMsg = error.message;
+      }
+
+      // Check for specific errors
+      if (errorMsg.includes('Failed to fetch') || errorMsg.includes('NetworkError')) {
+        errorMsg = 'Unable to connect to the AI server. Please check your internet connection and try again.';
+      } else if (errorMsg.includes('OpenAI')) {
+        errorMsg = 'The AI service is not configured. Please contact the administrator.';
+      } else if (errorMsg.includes('Qdrant')) {
+        errorMsg = 'The knowledge base is not configured. Please contact the administrator.';
+      } else if (errorMsg.includes('content not yet ingested')) {
+        errorMsg = 'The textbook content is still being processed. Please try again in a few minutes.';
+      }
+
       const errorMessage: Message = {
         role: 'assistant',
-        content: `Sorry, I encountered an error: ${error.message}. Please ensure the API server is configured correctly.`,
+        content: `❌ ${errorMsg}`,
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
