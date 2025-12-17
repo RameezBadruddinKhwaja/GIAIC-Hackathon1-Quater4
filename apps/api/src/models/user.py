@@ -1,37 +1,26 @@
-# User Model - SQLAlchemy
+"""
+User Model
 
-from sqlalchemy import Column, String, DateTime, Enum
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.ext.declarative import declarative_base
+SQLAlchemy model for user authentication and profile data.
+"""
+
+from sqlalchemy import Column, String, DateTime, Integer
 from datetime import datetime
-import uuid
-import enum
+from src.core.database import Base
 
-Base = declarative_base()
-
-class AuthProvider(str, enum.Enum):
-    EMAIL = "email"
-    GITHUB = "github"
-
-class HardwareProfile(str, enum.Enum):
-    RTX_4090 = "rtx_4090"
-    JETSON_ORIN_NANO = "jetson_orin_nano"
-
-class ProgrammingLanguage(str, enum.Enum):
-    PYTHON = "python"
-    CPP = "cpp"
 
 class User(Base):
+    """User model for authentication"""
+
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    email = Column(String, unique=True, nullable=False, index=True)
-    password_hash = Column(String, nullable=True)  # Null for OAuth users
-    auth_provider = Column(Enum(AuthProvider), nullable=False)
-    hardware_profile = Column(Enum(HardwareProfile), nullable=True)
-    programming_language = Column(Enum(ProgrammingLanguage), nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    last_login = Column(DateTime, nullable=True)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True, nullable=False)
+    username = Column(String, unique=True, index=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
+    full_name = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
-        return f"<User(id={self.id}, email={self.email}, provider={self.auth_provider})>"
+        return f"<User(id={self.id}, email={self.email}, username={self.username})>"

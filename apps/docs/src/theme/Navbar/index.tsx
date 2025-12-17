@@ -1,6 +1,6 @@
 import React from 'react';
 import OriginalNavbar from '@theme-original/Navbar';
-import AuthButton from '@site/src/components/AuthButton';
+import AuthButton from '@site/src/components/Auth/AuthButton';
 
 export default function Navbar(props): JSX.Element {
   return (

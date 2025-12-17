@@ -7,15 +7,27 @@ Physical AI & Humanoid Robotics Textbook Platform - Backend API
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 
 load_dotenv()
 import os
+
+from src.core.database import init_db
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database on startup"""
+    await init_db()
+    yield
+
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Physical AI Textbook Platform API",
     description="Backend API for AI-Native textbook platform",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # CORS middleware configuration
@@ -60,13 +72,11 @@ async def health_check():
     }
 
 # Include routers
-from src.routers.chat import router as chat_router
 from src.routers.auth import router as auth_router
 from src.routers.personalize import router as personalize_router
 from src.routers.translate import router as translate_router
 from src.routers.codegen import router as codegen_router
 
-app.include_router(chat_router)
 app.include_router(auth_router)
 app.include_router(personalize_router)
 app.include_router(translate_router)
