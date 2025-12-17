@@ -110,10 +110,22 @@ async def chat_query(request: ChatRequest):
             detail=str(e)
         )
     except Exception as e:
-        logger.error(f"Error in chat endpoint: {e}")
+        logger.error(f"Error in chat endpoint: {e}", exc_info=True)
+
+        # Provide more specific error messages
+        error_msg = str(e)
+        if "OPENAI_API_KEY" in error_msg or "OpenAI" in error_msg:
+            detail = "OpenAI API key not configured. Please set OPENAI_API_KEY environment variable."
+        elif "QDRANT" in error_msg or "Qdrant" in error_msg:
+            detail = "Qdrant vector database not configured. Please set QDRANT_URL and QDRANT_API_KEY environment variables."
+        elif "collection" in error_msg.lower():
+            detail = "Textbook content not yet ingested. Please run the content ingestion script first."
+        else:
+            detail = f"Service error: {error_msg[:100]}"  # First 100 chars of error
+
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error. Please try again later."
+            detail=detail
         )
 
 
