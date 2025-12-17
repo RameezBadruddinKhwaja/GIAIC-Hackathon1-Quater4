@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '@theme/Layout';
-import { useAuth } from '../components/AuthProvider';
+import { useAuth } from '../context/AuthContext';
 import { useHistory } from '@docusaurus/router';
 import styles from './onboarding.module.css';
 
@@ -10,17 +10,16 @@ export default function Onboarding(): JSX.Element {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { isAuthenticated, user, submitOnboarding } = useAuth();
+  const { user } = useAuth();
   const history = useHistory();
 
-  // Redirect if not authenticated or already completed onboarding
+  // Redirect if not authenticated
+  // Note: onboarding feature not yet fully implemented
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!user) {
       history.push('/login');
-    } else if (user?.hardware_profile && user?.programming_language) {
-      history.push('/');
     }
-  }, [isAuthenticated, user, history]);
+  }, [user, history]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +32,9 @@ export default function Onboarding(): JSX.Element {
 
     setIsLoading(true);
     try {
-      await submitOnboarding(hardwareProfile, programmingLanguage);
-      // Redirect to home after successful onboarding
+      // TODO: Implement onboarding submission API endpoint
+      // For now, just redirect to home
+      console.log('Onboarding preferences:', { hardwareProfile, programmingLanguage });
       history.push('/');
     } catch (err) {
       setError(err.message || 'Onboarding failed');

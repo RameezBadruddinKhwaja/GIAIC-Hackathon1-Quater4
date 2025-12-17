@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { useAuth } from '../components/AuthProvider';
+import { useAuth } from '../context/AuthContext';
 import { useHistory } from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './login.module.css';
@@ -10,19 +10,20 @@ export default function Login(): JSX.Element {
   const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { signin, signup, isAuthenticated } = useAuth();
+  const { login, signup, user } = useAuth();
   const history = useHistory();
 
   // Redirect if already authenticated
   React.useEffect(() => {
-    if (isAuthenticated) {
+    if (user) {
       history.push('/');
     }
-  }, [isAuthenticated, history]);
+  }, [user, history]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,12 +32,17 @@ export default function Login(): JSX.Element {
 
     try {
       if (isSignup) {
-        await signup(email, password);
-        // Redirect to onboarding after signup
-        history.push('/onboarding');
+        if (!username) {
+          setError('Username is required');
+          setIsLoading(false);
+          return;
+        }
+        await signup(email, username, password);
+        // Redirect to home after signup
+        history.push('/');
       } else {
-        await signin(email, password);
-        // Redirect to home after signin
+        await login(username, password);
+        // Redirect to home after login
         history.push('/');
       }
     } catch (err) {
@@ -78,17 +84,34 @@ export default function Login(): JSX.Element {
           )}
 
           <form onSubmit={handleSubmit} className={styles.form}>
+            {isSignup && (
+              <div className={styles.formGroup}>
+                <label htmlFor="email" className={styles.label}>
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={styles.input}
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+            )}
+
             <div className={styles.formGroup}>
-              <label htmlFor="email" className={styles.label}>
-                Email Address
+              <label htmlFor="username" className={styles.label}>
+                Username
               </label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className={styles.input}
-                placeholder="you@example.com"
+                placeholder="username"
                 required
               />
             </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../../context/AuthContext';
 import { useLocation } from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
@@ -11,7 +11,7 @@ interface TranslateButtonProps {
 export default function TranslateButton({ onContentUpdate }: TranslateButtonProps): JSX.Element | null {
   const { siteConfig } = useDocusaurusContext();
   const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
-  const { isAuthenticated, token } = useAuth();
+  const { user, token } = useAuth();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -125,7 +125,7 @@ export default function TranslateButton({ onContentUpdate }: TranslateButtonProp
   };
 
   // Don't show button if not authenticated
-  if (!isAuthenticated) {
+  if (!user || !token) {
     return null;
   }
 

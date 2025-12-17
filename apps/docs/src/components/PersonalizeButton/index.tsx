@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../../context/AuthContext';
 import { useLocation } from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
@@ -11,15 +11,16 @@ interface PersonalizeButtonProps {
 export default function PersonalizeButton({ onContentUpdate }: PersonalizeButtonProps): JSX.Element | null {
   const { siteConfig } = useDocusaurusContext();
   const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
-  const { isAuthenticated, user, token } = useAuth();
+  const { user, token } = useAuth();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPersonalized, setIsPersonalized] = useState(false);
 
-  // Don't show button if not authenticated or user has no hardware profile
-  if (!isAuthenticated || !user?.hardware_profile) {
+  // Don't show button if not authenticated
+  // Note: hardware_profile feature not yet implemented in User model
+  if (!user || !token) {
     return null;
   }
 
@@ -101,12 +102,8 @@ export default function PersonalizeButton({ onContentUpdate }: PersonalizeButton
   };
 
   // Get hardware label
+  // Note: hardware_profile not yet in User model, showing generic label
   const getHardwareLabel = (): string => {
-    if (user.hardware_profile === 'rtx_4090') {
-      return 'RTX 4090';
-    } else if (user.hardware_profile === 'jetson_orin_nano') {
-      return 'Jetson Orin Nano';
-    }
     return 'Your Hardware';
   };
 
