@@ -73,7 +73,7 @@ We commit to **Spec-Driven Development**: no code without specification, no impl
 - **Primary Database**: Neon (Serverless PostgreSQL)
 - **Authentication**: BetterAuth
 - **AI Orchestration**: OpenAI Agents SDK + ChatKit UI
-- **Automation**: Claude CLI + Subagents + Skills
+- **Automation**: Claude CLI (Spec-Kit Plus Orchestrated)
 
 ### Educational Content Stack
 
@@ -131,9 +131,9 @@ Before performing any action, agents MUST load and follow `AGENTS.md` including:
 Agents MUST NOT create new top-level folders. Only the following root folders are allowed:
 .specify, docs, apps, history, .claude
 
-Agents MUST generate a diff and explanation before modifying or deleting any existing file.
+Agents SHOULD generate diffs for destructive changes when feasible.
 
-Agents MUST verify any external configuration or API usage via Context7 MCP.
+MCP usage is mandatory only when external documentation or APIs are involved.
 Agents MUST use Vercel MCP, GitHub MCP, or Playwright MCP when required and not invent any commands or endpoints.
 
 ---
@@ -152,7 +152,7 @@ Agents MUST use Vercel MCP, GitHub MCP, or Playwright MCP when required and not 
 - **Structure**: Standard Docusaurus conventions
 - **Components**: Use Docusaurus built-in components (Tabs, Admonitions, etc.)
 - **Navigation**: Properly configured `sidebars.js`
-- **Frontend (Docusaurus) and Backend (FastAPI) must remain isolated and deployable independently. No cross-runtime imports or shared build steps
+- **Frontend (Docusaurus) and Backend (FastAPI)**: must remain isolated and deployable independently. No          cross-runtime imports or shared build steps
 
 ### FastAPI Standards
 
