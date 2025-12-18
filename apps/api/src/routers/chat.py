@@ -139,13 +139,14 @@ async def chat_health():
     """
     import os
 
-    openai_configured = bool(os.getenv("OPENAI_API_KEY"))
+    # Check for either OpenAI or Gemini API key
+    ai_configured = bool(os.getenv("OPENAI_API_KEY") or os.getenv("GEMINI_API_KEY"))
     qdrant_configured = bool(os.getenv("QDRANT_URL") and os.getenv("QDRANT_API_KEY"))
 
     return {
-        "status": "healthy" if (openai_configured and qdrant_configured) else "degraded",
+        "status": "healthy" if (ai_configured and qdrant_configured) else "degraded",
         "services": {
-            "openai": "configured" if openai_configured else "not configured",
+            "ai_api": "configured" if ai_configured else "not configured",
             "qdrant": "configured" if qdrant_configured else "not configured"
         }
     }

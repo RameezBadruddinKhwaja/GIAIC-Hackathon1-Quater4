@@ -27,14 +27,15 @@ class RAGGenerator:
 
     @classmethod
     def get_client(cls) -> OpenAI:
-        """Get or create OpenAI client"""
+        """Get or create OpenAI client (supports Gemini via OpenAI-compatible API)"""
         if cls._client is None:
-            api_key = os.getenv("OPENAI_API_KEY")
+            # Support both OpenAI and Gemini API keys
+            api_key = os.getenv("OPENAI_API_KEY") or os.getenv("GEMINI_API_KEY")
             if not api_key:
-                raise ValueError("OPENAI_API_KEY must be set in environment variables")
+                raise ValueError("OPENAI_API_KEY or GEMINI_API_KEY must be set in environment variables")
 
             cls._client = OpenAI(api_key=api_key)
-            logger.info("OpenAI client initialized for chat completions")
+            logger.info("OpenAI-compatible client initialized for chat completions")
 
         return cls._client
 

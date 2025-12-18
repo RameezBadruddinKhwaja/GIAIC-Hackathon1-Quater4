@@ -7,27 +7,18 @@ Physical AI & Humanoid Robotics Textbook Platform - Backend API
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from contextlib import asynccontextmanager
 
 load_dotenv()
 import os
 
-from src.core.database import init_db
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Initialize database on startup"""
-    await init_db()
-    yield
-
+# Note: Database initialization removed from lifespan for Vercel compatibility
+# Tables should be created via Alembic migrations: `alembic upgrade head`
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Physical AI Textbook Platform API",
     description="Backend API for AI-Native textbook platform",
-    version="1.0.0",
-    lifespan=lifespan
+    version="1.0.0"
 )
 
 # CORS middleware configuration
