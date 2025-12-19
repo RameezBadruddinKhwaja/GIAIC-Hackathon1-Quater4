@@ -1,49 +1,67 @@
 /**
  * Auth Button Component
- * 
- * Displays Sign In/Sign Up buttons or user menu based on auth state.
+ *
+ * Displays Sign In/Sign Up buttons or user info based on auth state.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import SignInModal from './SignInModal';
-import SignUpModal from './SignUpModal';
-import styles from './styles.module.css';
+import styles from './AuthButton.module.css';
 
 export default function AuthButton() {
-  const { user, loading, logout } = useAuth();
-  const [showSignIn, setShowSignIn] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  const { user, loading, signout } = useAuth();
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   if (loading) {
-    return <div className={styles.authButton}>Loading...</div>;
+    return <div className={styles.loading}>Loading...</div>;
   }
 
   if (user) {
     return (
-      <div className={styles.userMenuContainer}>
+      <div className={styles.userMenuContainer} ref={menuRef}>
         <button
           className={styles.userButton}
-          onClick={() => setShowUserMenu(!showUserMenu)}
+          onClick={() => setShowMenu(!showMenu)}
+          aria-expanded={showMenu}
+          aria-haspopup="true"
         >
-          {user.username}
+          {user.email.split('@')[0]}
         </button>
-        
-        {showUserMenu && (
+
+        {showMenu && (
           <div className={styles.userMenu}>
             <div className={styles.userInfo}>
-              <div className={styles.userName}>{user.full_name || user.username}</div>
-              <div className={styles.userEmail}>{user.email}</div>
+              <div className={styles.userName}>{user.email}</div>
+              <div className={styles.userLevel}>
+                Software: {user.software_level}
+              </div>
+              <div className={styles.userLevel}>
+                Hardware: {user.hardware_level}
+              </div>
             </div>
             <button
-              className={styles.logoutButton}
+              className={styles.signoutButton}
               onClick={() => {
-                logout();
-                setShowUserMenu(false);
+                signout();
+                setShowMenu(false);
               }}
             >
-              Logout
+              Sign Out
             </button>
           </div>
         )}
@@ -52,39 +70,13 @@ export default function AuthButton() {
   }
 
   return (
-    <>
-      <div className={styles.authButtons}>
-        <button
-          className={styles.signInButton}
-          onClick={() => setShowSignIn(true)}
-        >
-          Sign In
-        </button>
-        <button
-          className={styles.signUpButton}
-          onClick={() => setShowSignUp(true)}
-        >
-          Sign Up
-        </button>
-      </div>
-
-      <SignInModal
-        isOpen={showSignIn}
-        onClose={() => setShowSignIn(false)}
-        onSwitchToSignUp={() => {
-          setShowSignIn(false);
-          setShowSignUp(true);
-        }}
-      />
-
-      <SignUpModal
-        isOpen={showSignUp}
-        onClose={() => setShowSignUp(false)}
-        onSwitchToSignIn={() => {
-          setShowSignUp(false);
-          setShowSignIn(true);
-        }}
-      />
-    </>
+    <div className={styles.authButtons}>
+      <a href="/signin" className={styles.signinButton}>
+        Sign In
+      </a>
+      <a href="/signup" className={styles.signupButton}>
+        Sign Up
+      </a>
+    </div>
   );
 }

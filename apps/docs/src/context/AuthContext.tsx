@@ -1,144 +1,136 @@
-/**
- * Authentication Context
- * 
- * Manages auth state and provides authentication functions.
- */
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import axios from 'axios';
 
+// API base URL
 const API_URL = process.env.REACT_APP_API_URL || 'https://giaic-hackathon1-quater4.vercel.app';
 
+// User interface
 interface User {
   id: number;
   email: string;
-  username: string;
-  full_name?: string;
+  software_level: string;
+  hardware_level: string;
+  created_at: string;
 }
 
+// Auth context interface
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   loading: boolean;
-  login: (username: string, password: string) => Promise<void>;
-  signup: (email: string, username: string, password: string, fullName?: string) => Promise<void>;
-  logout: () => void;
-  refreshUser: () => Promise<void>;
+  error: string | null;
+  signin: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, softwareLevel: string, hardwareLevel: string) => Promise<void>;
+  signout: () => void;
+  loadUser: () => Promise<void>;
 }
 
+// Create context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Auth provider component
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load token and user from localStorage on mount
+  // Load user on mount if token exists
   useEffect(() => {
-    const savedToken = localStorage.getItem('auth_token');
-    if (savedToken) {
-      setToken(savedToken);
-      refreshUser(savedToken);
-    } else {
-      setLoading(false);
+    // Check if there's a token in the URL (from GitHub OAuth)
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = urlParams.get('token');
+
+    if (tokenFromUrl) {
+      // Store the token and remove it from URL
+      localStorage.setItem('auth_token', tokenFromUrl);
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
+
+    loadUser();
   }, []);
 
-  const refreshUser = async (authToken?: string) => {
-    const tkn = authToken || token;
-    if (!tkn) {
+  const loadUser = async () => {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
       setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/me`, {
+      const response = await axios.get(`${API_URL}/api/auth/me`, {
         headers: {
-          'Authorization': `Bearer ${tkn}`,
-        },
+          'Authorization': `Bearer ${token}`
+        }
       });
-
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      } else {
-        // Token invalid, clear auth
-        localStorage.removeItem('auth_token');
-        setToken(null);
-        setUser(null);
-      }
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
+      setUser(response.data);
+    } catch (err) {
+      // Token invalid or expired, clear it
       localStorage.removeItem('auth_token');
-      setToken(null);
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (username: string, password: string) => {
-    const response = await fetch(`${API_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Login failed');
-    }
-
-    const data = await response.json();
-    const newToken = data.access_token;
-
-    setToken(newToken);
-    localStorage.setItem('auth_token', newToken);
-
-    // Fetch user data
-    await refreshUser(newToken);
-  };
-
-  const signup = async (email: string, username: string, password: string, fullName?: string) => {
-    const response = await fetch(`${API_URL}/api/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+  const signin = async (email: string, password: string) => {
+    setError(null);
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/signin`, {
         email,
-        username,
-        password,
-        full_name: fullName,
-      }),
-    });
+        password
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Signup failed');
+      const { access_token } = response.data;
+      localStorage.setItem('auth_token', access_token);
+
+      // Load user data
+      await loadUser();
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Sign in failed');
+      throw err;
     }
-
-    // After signup, log in automatically
-    await login(username, password);
   };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
+  const signup = async (
+    email: string,
+    password: string,
+    softwareLevel: string,
+    hardwareLevel: string
+  ) => {
+    setError(null);
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/signup`, {
+        email,
+        password,
+        software_level: softwareLevel,
+        hardware_level: hardwareLevel
+      });
+
+      const { access_token } = response.data;
+      localStorage.setItem('auth_token', access_token);
+
+      // Load user data
+      await loadUser();
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Sign up failed');
+      throw err;
+    }
+  };
+
+  const signout = () => {
     localStorage.removeItem('auth_token');
+    setUser(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
         loading,
-        login,
+        error,
+        signin,
         signup,
-        logout,
-        refreshUser,
+        signout,
+        loadUser
       }}
     >
       {children}
@@ -146,6 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Hook to use auth context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
