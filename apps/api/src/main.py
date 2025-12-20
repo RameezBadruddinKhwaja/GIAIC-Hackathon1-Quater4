@@ -61,9 +61,28 @@ async def health_check():
     }
 
 # Include routers
-from src.routers.codegen import router as codegen_router
+import sys
+import os
 
-app.include_router(codegen_router)
+# Add the parent directory to the path so we can import from the api directory
+current_dir = os.path.dirname(__file__)
+parent_dir = os.path.dirname(current_dir)
+api_dir = os.path.join(parent_dir)
+sys.path.insert(0, api_dir)
+
+try:
+    from api.chatbot import router as chatbot_router
+    app.include_router(chatbot_router, prefix="/api")  # Add /api prefix to match expected routes
+except ImportError as e:
+    print(f"Error importing chatbot router: {e}")
+    # Fallback to existing router if api.chatbot is not available
+    try:
+        from src.routers.codegen import router as codegen_router
+        app.include_router(codegen_router)
+    except ImportError as e2:
+        print(f"Error importing codegen router: {e2}")
+        # If both imports fail, we'll have no API routes but the app should still start
+        pass
 
 if __name__ == "__main__":
     import uvicorn
