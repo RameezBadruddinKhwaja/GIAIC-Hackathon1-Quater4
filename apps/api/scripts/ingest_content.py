@@ -34,7 +34,7 @@ def main():
     load_dotenv()
 
     # Verify environment variables
-    required_vars = ['OPENAI_API_KEY', 'QDRANT_URL', 'QDRANT_API_KEY']
+    required_vars = ['GEMINI_API_KEY', 'QDRANT_URL', 'QDRANT_API_KEY']  # Changed from OPENAI_API_KEY to GEMINI_API_KEY
     missing_vars = [var for var in required_vars if not os.getenv(var)]
 
     if missing_vars:
