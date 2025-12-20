@@ -2,10 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
-from .api import chatbot
 
-# Load environment variables
-load_dotenv()
+# Only load env if not in Vercel environment
+if not os.getenv("VERCEL"):
+    load_dotenv()
+
+# Import API routes after imports to avoid circular dependencies
+from .api import chatbot
 
 app = FastAPI(
     title="Physical AI & Humanoid Robotics Textbook API",
