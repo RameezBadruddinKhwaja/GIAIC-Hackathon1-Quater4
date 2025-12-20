@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../context/AuthContext'; // Assuming auth context exists
 
 // Define TypeScript interfaces
 interface Citation {
@@ -31,7 +30,6 @@ const ChatWidget: React.FC = () => {
   const [showSelectionPrompt, setShowSelectionPrompt] = useState(false);
   const [selectionQuestion, setSelectionQuestion] = useState('');
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  const { isAuthenticated } = useAuth(); // Use auth context to check if user is logged in
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
@@ -211,40 +209,6 @@ const ChatWidget: React.FC = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // If user is not authenticated, show a message
-  if (!isAuthenticated) {
-    return (
-      <div className="chat-widget-unauthenticated">
-        <button
-          className="chat-toggle-btn"
-          onClick={() => setIsOpen(!isOpen)}
-          title="Chat with the textbook (requires login)"
-        >
-          💬 Chat (Login Required)
-        </button>
-
-        {isOpen && (
-          <div className="chat-container">
-            <div className="chat-header">
-              <h3>Textbook Assistant</h3>
-              <button
-                className="chat-close-btn"
-                onClick={() => setIsOpen(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="chat-messages">
-              <div className="auth-prompt">
-                <p>Please sign in to use the chatbot feature.</p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
   return (
     <div className="chat-widget">
       {/* Floating chat button */}
@@ -253,7 +217,7 @@ const ChatWidget: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         title="Chat with the textbook"
       >
-        💬 Chat
+        💬
       </button>
 
       {/* Selection prompt that appears when text is selected */}
@@ -294,7 +258,7 @@ const ChatWidget: React.FC = () => {
             {messages.length === 0 ? (
               <div className="welcome-message">
                 <p>Hello! I'm your Physical AI & Humanoid Robotics textbook assistant.</p>
-                <p>Ask me questions about the content, or select text and click "Ask about selection".</p>
+                <p>Ask me questions about the content, or select text to ask about it.</p>
               </div>
             ) : (
               messages.map((message) => (
@@ -336,30 +300,37 @@ const ChatWidget: React.FC = () => {
       <style jsx>{`
         .chat-widget {
           position: fixed;
-          bottom: 20px;
-          right: 20px;
+          bottom: 30px;
+          right: 30px;
           z-index: 1000;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
 
         .chat-toggle-btn {
-          background-color: #2563eb;
+          background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
           color: white;
           border: none;
           border-radius: 50%;
-          width: 60px;
-          height: 60px;
-          font-size: 24px;
+          width: 65px;
+          height: 65px;
+          font-size: 28px;
           cursor: pointer;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+          animation: float 3s ease-in-out infinite;
         }
 
         .chat-toggle-btn:hover {
-          transform: scale(1.05);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+          transform: scale(1.1) rotate(5deg);
+          box-shadow: 0 15px 35px rgba(79, 70, 229, 0.4);
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-5px); }
         }
 
         .chat-container {
@@ -369,127 +340,173 @@ const ChatWidget: React.FC = () => {
           width: 400px;
           height: 600px;
           background: white;
-          border-radius: 12px;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+          border-radius: 20px;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
           display: flex;
           flex-direction: column;
           overflow: hidden;
+          transform: scale(1);
+          opacity: 1;
+          animation: slideUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
         }
 
         .chat-header {
-          background-color: #2563eb;
+          background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
           color: white;
-          padding: 16px;
+          padding: 20px;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .chat-header h3 {
           margin: 0;
-          font-size: 16px;
+          font-size: 18px;
+          font-weight: 600;
         }
 
         .chat-close-btn {
-          background: none;
+          background: rgba(255, 255, 255, 0.2);
           border: none;
           color: white;
-          font-size: 24px;
+          font-size: 20px;
           cursor: pointer;
-          padding: 0;
-          width: 30px;
-          height: 30px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: background 0.2s ease;
+        }
+
+        .chat-close-btn:hover {
+          background: rgba(255, 255, 255, 0.3);
         }
 
         .chat-messages {
           flex: 1;
           overflow-y: auto;
-          padding: 16px;
-          background-color: #f9fafb;
+          padding: 20px;
+          background: #f8fafc;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
         }
 
         .welcome-message {
-          color: #6b7280;
+          color: #64748b;
           text-align: center;
-          padding: 20px 0;
+          padding: 30px 20px;
+          font-size: 15px;
         }
 
         .message {
-          margin-bottom: 16px;
           max-width: 85%;
+          animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .message.user {
-          margin-left: auto;
+          align-self: flex-end;
         }
 
         .message.assistant {
-          margin-right: auto;
+          align-self: flex-start;
         }
 
         .message-content {
-          padding: 12px 16px;
-          border-radius: 18px;
+          padding: 16px 20px;
+          border-radius: 20px;
           position: relative;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+          word-wrap: break-word;
+          min-width: 100px;
         }
 
         .message.user .message-content {
-          background-color: #2563eb;
+          background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
           color: white;
-          border-bottom-right-radius: 4px;
+          border-bottom-right-radius: 5px;
         }
 
         .message.assistant .message-content {
-          background-color: white;
-          border: 1px solid #e5e7eb;
-          border-bottom-left-radius: 4px;
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-bottom-left-radius: 5px;
+          color: #334155;
         }
 
         .message-timestamp {
-          font-size: 12px;
-          color: #9ca3af;
-          margin-top: 4px;
+          font-size: 11px;
+          color: #94a3b8;
+          margin-top: 6px;
           text-align: right;
+          padding-right: 5px;
         }
 
         .chat-input-form {
           display: flex;
-          padding: 12px;
+          padding: 20px;
           background: white;
-          border-top: 1px solid #e5e7eb;
+          border-top: 1px solid #e2e8f0;
+          gap: 12px;
         }
 
         .chat-input-form input {
           flex: 1;
-          padding: 12px 16px;
-          border: 1px solid #d1d5db;
-          border-radius: 24px;
-          margin-right: 8px;
-          font-size: 14px;
+          padding: 16px 20px;
+          border: 2px solid #e2e8f0;
+          border-radius: 60px;
+          font-size: 15px;
+          transition: all 0.2s ease;
+          outline: none;
         }
 
         .chat-input-form input:focus {
-          outline: none;
-          border-color: #2563eb;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          border-color: #818cf8;
+          box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
         }
 
         .chat-input-form button {
-          background-color: #2563eb;
+          background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
           color: white;
           border: none;
-          border-radius: 24px;
-          padding: 12px 20px;
+          border-radius: 60px;
+          padding: 0 25px;
           cursor: pointer;
           font-weight: 500;
+          font-size: 15px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .chat-input-form button:disabled {
-          background-color: #9ca3af;
+          background: #cbd5e1;
           cursor: not-allowed;
+        }
+
+        .chat-input-form button:not(:disabled):hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
         }
 
         .selection-prompt {
@@ -498,56 +515,87 @@ const ChatWidget: React.FC = () => {
           left: 50%;
           transform: translate(-50%, -50%);
           background: white;
-          padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+          padding: 25px;
+          border-radius: 16px;
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
           z-index: 1001;
-          min-width: 400px;
+          min-width: 450px;
+          max-width: 90vw;
+          animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+          from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+          to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .selection-content p {
+          margin: 0 0 15px 0;
+          font-weight: 500;
+          color: #334155;
         }
 
         .selection-content textarea {
           width: 100%;
-          margin: 10px 0;
-          padding: 10px;
-          border: 1px solid #d1d5db;
-          border-radius: 4px;
+          margin: 10px 0 15px 0;
+          padding: 14px;
+          border: 2px solid #e2e8f0;
+          border-radius: 12px;
           resize: vertical;
+          min-height: 80px;
+          font-family: inherit;
+          font-size: 15px;
+          transition: border-color 0.2s ease;
+        }
+
+        .selection-content textarea:focus {
+          outline: none;
+          border-color: #818cf8;
+          box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
         }
 
         .selection-actions {
           display: flex;
-          gap: 10px;
+          gap: 12px;
           justify-content: flex-end;
         }
 
         .selection-actions button {
-          padding: 8px 16px;
+          padding: 12px 24px;
           border: none;
-          border-radius: 4px;
+          border-radius: 8px;
           cursor: pointer;
+          font-weight: 500;
+          font-size: 14px;
+          transition: all 0.2s ease;
         }
 
         .selection-actions button:first-child {
-          background-color: #2563eb;
+          background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
           color: white;
         }
 
         .selection-actions button:last-child {
-          background-color: #e5e7eb;
-          color: #374151;
+          background: #f1f5f9;
+          color: #64748b;
+        }
+
+        .selection-actions button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .chat-citations {
-          margin-top: 8px;
-          padding-top: 8px;
-          border-top: 1px solid #e5e7eb;
+          margin-top: 12px;
+          padding-top: 12px;
+          border-top: 1px solid #e2e8f0;
         }
 
         .citation-title {
           font-weight: 600;
-          margin-bottom: 4px;
+          margin-bottom: 6px;
           font-size: 13px;
-          color: #4b5563;
+          color: #475569;
         }
 
         .citation-list {
@@ -557,36 +605,71 @@ const ChatWidget: React.FC = () => {
         }
 
         .citation-item {
-          margin-bottom: 4px;
+          margin-bottom: 6px;
         }
 
         .citation-item a {
-          color: #3b82f6;
+          color: #581c87;
           text-decoration: none;
           font-size: 13px;
+          padding: 2px 0;
+          display: inline-block;
+          transition: color 0.2s ease;
         }
 
         .citation-item a:hover {
+          color: #7e22ce;
           text-decoration: underline;
-        }
-
-        .auth-prompt {
-          text-align: center;
-          padding: 20px;
-          color: #6b7280;
         }
 
         @media (max-width: 768px) {
           .chat-container {
-            width: 90vw;
-            max-width: 90vw;
-            height: 50vh;
-            right: 5vw;
+            width: 95vw;
+            max-width: 95vw;
+            height: 60vh;
+            right: 2.5vw;
+            bottom: 70px;
+          }
+
+          .chat-toggle-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
           }
 
           .selection-prompt {
-            width: 90%;
+            width: 95%;
             min-width: auto;
+            padding: 20px;
+          }
+
+          .selection-content textarea {
+            min-height: 60px;
+          }
+
+          .chat-header {
+            padding: 16px;
+          }
+
+          .chat-header h3 {
+            font-size: 16px;
+          }
+
+          .chat-messages {
+            padding: 16px;
+          }
+
+          .chat-input-form {
+            padding: 16px;
+          }
+
+          .chat-input-form input {
+            padding: 14px 16px;
+            font-size: 14px;
+          }
+
+          .chat-input-form button {
+            padding: 0 20px;
           }
         }
       `}</style>
