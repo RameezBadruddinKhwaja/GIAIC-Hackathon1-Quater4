@@ -59,6 +59,7 @@ const ChatWidget: React.FC = () => {
     };
   }, []);
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
@@ -76,8 +77,18 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Call the backend API
-      const response = await fetch('/api/chatbot/query', {
+      // Call the backend API - use proxy in development, direct URL in production
+      // In Vercel deployment, the rewrites in vercel.json will forward /api/chatbot to the deployed backend
+      const isDev = process.env.NODE_ENV === 'development';
+      const isVercel = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app');
+      let apiUrl = '/api/chatbot/query';
+
+      // Use direct URL only if not in development and not on Vercel (for direct deployment scenarios)
+      if (!isDev && !isVercel) {
+        apiUrl = 'https://rameez12-physical-ai-textbook.hf.space/api/chatbot/query';
+      }
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,8 +150,18 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Call the backend API for selection-based query
-      const response = await fetch('/api/chatbot/query-selection', {
+      // Call the backend API for selection-based query - use proxy in development, direct URL in production
+      // In Vercel deployment, the rewrites in vercel.json will forward /api/chatbot to the deployed backend
+      const isDev = process.env.NODE_ENV === 'development';
+      const isVercel = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app');
+      let apiUrl = '/api/chatbot/query-selection';
+
+      // Use direct URL only if not in development and not on Vercel (for direct deployment scenarios)
+      if (!isDev && !isVercel) {
+        apiUrl = 'https://rameez12-physical-ai-textbook.hf.space/api/chatbot/query-selection';
+      }
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

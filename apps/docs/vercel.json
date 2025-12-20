@@ -7,6 +7,12 @@
   "framework": "docusaurus",
   "outputDirectory": "build",
   "regions": ["iad1"],
+  "rewrites": [
+    {
+      "source": "/api/chatbot/:path*",
+      "destination": "https://rameez12-physical-ai-textbook.hf.space/api/chatbot/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

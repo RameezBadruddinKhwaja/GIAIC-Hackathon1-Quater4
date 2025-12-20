@@ -50,3 +50,5 @@ out/
 
 .gemini/
 gha-creds-*.json
+# Ignore the Physical AI Textbook directory which contains a nested Git repo
+PhysicalAITextbook/
