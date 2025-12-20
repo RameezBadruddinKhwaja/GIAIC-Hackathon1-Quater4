@@ -93,6 +93,28 @@ cd apps/api
 uvicorn src.main:app --reload  # http://localhost:8000
 ```
 
+### Hugging Face Spaces Deployment
+
+For Docker-based deployment on Hugging Face Spaces:
+
+```bash
+# Navigate to Hugging Face Space directory
+cd PhysicalAITextbook/Physical-AI-Textbook
+
+# Set up authentication (replace <your_token> with your Hugging Face token)
+git remote set-url origin https://<your_token>@huggingface.co/spaces/rameez12/Physical-AI-Textbook
+
+# Deploy to Hugging Face Spaces
+git add .
+git commit -m "Add RAG chatbot backend for Hugging Face Spaces"
+git push origin main
+```
+
+Required environment variables for Hugging Face Spaces:
+- `QDRANT_URL` - Your Qdrant instance URL
+- `QDRANT_API_KEY` - Your Qdrant API key
+- `GEMINI_API_KEY` - Your Google Gemini API key
+
 ## 📖 Documentation
 
 - **[Deployment Guide](DEPLOYMENT.md)** - Deploy to Vercel production

@@ -25,6 +25,7 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // Proxy API requests to the deployed backend
   // Custom fields for environment variables (accessible in React components)
   customFields: {},
 
@@ -37,6 +38,32 @@ const config: Config = {
   },
 
   themes: ['@docusaurus/theme-mermaid'],
+
+  staticDirectories: ['static'],
+
+  // Development server proxy configuration to forward API requests to the deployed backend
+  customFields: {
+    // Use environment variable for backend API URL, default to deployed URL
+    BACKEND_API_URL: process.env.BACKEND_API_URL || 'https://rameez12-physical-ai-textbook.hf.space',
+  },
+
+  // Development server configuration with proxy for API requests
+  devServer: {
+    proxy: {
+      '/api/chatbot': {
+        target: process.env.BACKEND_API_URL || 'https://rameez12-physical-ai-textbook.hf.space',
+        changeOrigin: true,
+        secure: true,
+        logLevel: 'debug',
+        onProxyReq: (proxyReq, req, res) => {
+          console.log(`Proxying ${req.method} ${req.url} to ${process.env.BACKEND_API_URL || 'https://rameez12-physical-ai-textbook.hf.space'}`);
+        },
+        onProxyRes: (proxyRes, req, res) => {
+          console.log(`Response from ${req.url}: ${proxyRes.statusCode}`);
+        }
+      },
+    },
+  },
 
   presets: [
     [
