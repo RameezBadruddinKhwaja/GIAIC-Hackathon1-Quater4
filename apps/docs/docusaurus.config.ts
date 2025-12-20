@@ -26,10 +26,7 @@ const config: Config = {
   },
 
   // Custom fields for environment variables (accessible in React components)
-  customFields: {
-    apiUrl: process.env.REACT_APP_API_URL || process.env.API_URL || 'https://giaic-hackathon1-quater4.vercel.app',
-    githubClientId: process.env.REACT_APP_BETTER_AUTH_GITHUB_CLIENT_ID || process.env.BETTER_AUTH_GITHUB_CLIENT_ID || '',
-  },
+  customFields: {},
 
   // Enable Mermaid support
   markdown: {
@@ -81,16 +78,6 @@ const config: Config = {
           sidebarId: 'hardwareSidebar',
           position: 'left',
           label: 'Hardware Lab',
-        },
-        {
-          to: '/chat',
-          label: 'Chat',
-          position: 'left',
-        },
-        {
-          to: '/login',
-          label: 'Sign In',
-          position: 'right',
         },
       ],
     },
