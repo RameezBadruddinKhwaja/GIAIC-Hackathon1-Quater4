@@ -125,11 +125,6 @@ export default function ChatWidget(): JSX.Element | null {
     }
   };
 
-  // Only render if user is authenticated
-  if (!user) {
-    return null;
-  }
-
   return (
     <>
       {/* Floating Chat Button */}
