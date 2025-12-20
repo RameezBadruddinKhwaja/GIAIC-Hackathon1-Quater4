@@ -22,16 +22,14 @@ app = FastAPI(
 )
 
 # CORS middleware configuration
+# Allow all origins for hackathon/development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://giaic-hackathon1-quater4-frontend.vercel.app",
-        "https://giaic-hackathon1-quater4.vercel.app",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=False,  # Must be False when using allow_origins=["*"]
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 @app.get("/")
