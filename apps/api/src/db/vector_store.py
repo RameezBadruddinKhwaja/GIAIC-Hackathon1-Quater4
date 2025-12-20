@@ -2,6 +2,7 @@
 Qdrant Vector Store Configuration
 
 Manages connection to Qdrant Cloud for vector embeddings storage and retrieval.
+Uses sentence transformers for embedding generation (free alternative to OpenAI embeddings).
 """
 
 import os
@@ -15,8 +16,8 @@ logger = logging.getLogger(__name__)
 # Collection name
 COLLECTION_NAME = "textbook_content"
 
-# Embedding dimensions (OpenAI text-embedding-3-small uses 1536 dimensions)
-VECTOR_SIZE = 1536
+# Embedding dimensions (sentence-transformers 'all-MiniLM-L6-v2' model uses 384 dimensions)
+VECTOR_SIZE = 384
 
 class VectorStore:
     """Singleton wrapper for Qdrant client"""

@@ -15,7 +15,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # Import all models for autogenerate support
-from src.models import User, ChatLog, PersonalizedContent, TranslatedContent, AuditLog
+from src.models import User, AuditLog
 
 # This is the Alembic Config object
 config = context.config

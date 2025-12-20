@@ -2,11 +2,9 @@
 
 from sqlalchemy import Column, String, Text, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 import uuid
-
-Base = declarative_base()
+from ..core.database import Base
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"
