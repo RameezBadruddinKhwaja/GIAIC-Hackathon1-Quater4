@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { useAuth } from '../../context/AuthContext';
 import styles from './styles.module.css';
 
 interface Message {
@@ -27,7 +26,6 @@ interface ChatResponse {
 
 export default function ChatWidget(): JSX.Element | null {
   const { siteConfig } = useDocusaurusContext();
-  const { user } = useAuth();
   const API_URL = (siteConfig.customFields?.apiUrl as string) || 'https://giaic-hackathon1-quater4.vercel.app';
 
   const [isOpen, setIsOpen] = useState(false);
