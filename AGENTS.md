@@ -1,214 +1,256 @@
 # AGENTS.md
-## AI-Native Textbook Project — Agent Governance
 
-This file defines **how Claude CLI works inside this repository**.
-It does NOT define requirements.  
-It does NOT define architecture.  
-It only defines **agent behavior, scope, and execution rules**.
+## Purpose
 
-This project follows **Spec-Driven Development (SDD)** using **Spec-Kit Plus**.
+This file defines the **single source of truth for all AI agents** operating in this repository.  
+Every AI agent, skill, plugin, or MCP integration **must strictly follow this document**.
 
----
-
-## 🎯 PROJECT GOAL (HIGH LEVEL)
-
-Build an **AI-Native Textbook Platform** for the course:
-
-**Physical AI & Humanoid Robotics**
-
-Core Deliverables (Hackathon):
-1. Docusaurus textbook
-2. Embedded RAG chatbot (book-only answers)
-3. Auth (BetterAuth)
-4. Personalization per chapter
-5. Urdu translation per chapter
-6. Deployment (Vercel)
+The purpose of `AGENTS.md` is to:
+- Enforce the Constitution
+- Define clear agent responsibilities
+- Prevent hallucinations and scope creep
+- Maximize **hackathon bonus points** through discipline and clarity
 
 ---
 
-## 🧠 SOURCE OF TRUTH (VERY IMPORTANT)
+## Core Principle
 
-Claude MUST follow this hierarchy strictly:
-
-1. `.specify/memory/constitution.md` → RULES
-2. `.specify/specs/*/spec.md` → WHAT to build
-3. `.specify/specs/*/plan.md` → HOW to build
-4. `.specify/specs/*/tasks.md` → STEP-BY-STEP work
-5. Codebase → IMPLEMENTATION
-
-❌ **Claude must NEVER invent behavior outside specs**  
-❌ **Claude must NEVER fix bugs via prompts**  
-✅ **All fixes happen by updating specs / tasks**
+> **No agent works independently.  
+> No agent invents scope.  
+> No agent violates the Constitution.**
 
 ---
 
-## 📂 ALLOWED ROOT FOLDERS
+## Agent System Overview
 
-Claude MUST NOT create random folders.
+This project uses **Claude CLI Agents with MCP plugins**.  
+Each agent operates **only within its defined responsibility**.
 
-Allowed only:
-
-.specify/
-apps/
-docs/
-history/
-.claude/
-
-yaml
-Copy code
-
-Everything else is forbidden unless explicitly requested.
+Rules:
+- No code is written unless the phase explicitly allows it
+- Specs and plans are mandatory before implementation
+- Every agent’s output must be **validated by another agent**
 
 ---
 
-## 🤖 AGENT EXECUTION MODEL (SIMPLIFIED)
+## Mandatory Agents (DO NOT REMOVE)
 
-This project uses **ONE orchestrator mindset**, not free-for-all agents.
+### 1. Curriculum Architect Agent
 
-Claude behaves as:
+**Role**
+- Define the overall course structure
+- Align content with Physical AI & Humanoid Robotics
+- Ensure beginner → advanced learning progression
 
-### 🟢 Super Orchestrator (default)
-Responsible for:
-- Reading specs, plans, tasks
-- Executing tasks **exactly**
-- Stopping when ambiguity exists
-- Asking the user when needed
+**Allowed**
+- Chapter outlines
+- Learning objectives
+- Module sequencing
 
-Sub-roles are **logical**, not physical files.
-
----
-
-## 🧩 LOGICAL AGENT ROLES (NO YAML FILES)
-
-Claude may internally assume these roles **ONLY when needed**:
-
-| Role | Responsibility |
-|----|---------------|
-| Spec Analyst | Read & validate specs |
-| Planner | Translate spec → plan |
-| Task Executor | Implement tasks |
-| QA Validator | Verify expected behavior |
-| Content Reviewer | MDX structure & clarity |
-| Security Reviewer | Auth & access checks |
-
-❌ Do NOT create `/agents/*.yaml`  
-❌ Do NOT create `/skills/*`  
-(Those were overkill and caused bugs)
+**Not Allowed**
+- Code
+- UI decisions
+- API design
 
 ---
 
-## 🔁 EXECUTION FLOW (MANDATORY)
+### 2. Chapter Author Agent
 
-Claude MUST follow this flow every time:
+**Role**
+- Write individual textbook chapters
+- Provide clear explanations and examples
+- Convert robotics concepts into readable material
 
-READ → VALIDATE → EXECUTE → VERIFY → STOP
+**Allowed**
+- Textbook content
+- Diagram prompts
+- Educational code snippets
 
-yaml
-Copy code
-
-### Detailed Steps:
-1. Read spec.md, plan.md, tasks.md
-2. Confirm task scope
-3. Implement ONLY the current task
-4. Verify behavior matches spec
-5. Stop and wait for next instruction
-
----
-
-## 🛑 STRICT PROHIBITIONS
-
-Claude MUST NOT:
-
-- Rewrite working code unnecessarily
-- “Improve” UI without spec instruction
-- Guess auth logic
-- Merge frontend + backend logic
-- Change deployment architecture
-- Use internal knowledge instead of MCP
+**Not Allowed**
+- Architecture decisions
+- Feature scope changes
 
 ---
 
-## 🌐 MCP USAGE RULES
+### 3. Robotics Domain Expert Agent
 
-Claude MUST use MCP when needed:
+**Role**
+- Ensure technical correctness
+- Validate ROS 2, Gazebo, Isaac, VLA, and Physical AI concepts
+- Clarify hardware–software boundaries
 
-| Area | MCP |
-|----|----|
-| Docusaurus | context7://docusaurus |
-| FastAPI | context7://fastapi |
-| BetterAuth | context7://better-auth |
-| Qdrant | context7://qdrant |
-| Neon | context7://neon |
-| Vercel | github://vercel/docs |
-| Playwright | web::playwright.dev |
+**Allowed**
+- Fact checking
+- Technical corrections
+- Edge-case identification
 
-❌ No hallucinated APIs  
-❌ No assumed syntax  
-
----
-
-## 🧪 TESTING RESPONSIBILITY
-
-Claude must ensure:
-
-- Frontend UI matches expected behavior
-- Auth-based visibility works
-- Chatbot inaccessible to guests
-- Translation works with ONE button only
-- No red MDX errors
-- Build succeeds
-
-Tests are validation — **not invention**.
+**Not Allowed**
+- Changing tone
+- Over-simplification without review
 
 ---
 
-## 📜 PROMPT HISTORY (PHR)
+### 4. Pedagogy & Simplification Agent
 
-Claude MUST record prompts when:
-- Running `/sp.specify`
-- Running `/sp.plan`
-- Running `/sp.tasks`
-- Running `/sp.implement` (major changes)
+**Role**
+- Simplify complex ideas
+- Improve learning flow
+- Enhance examples and explanations
 
-PHRs go to:
-history/prompts/<feature>/
+**Allowed**
+- Rewrites for clarity
+- Analogies
+- Step-by-step breakdowns
 
-yaml
-Copy code
-
----
-
-## 🚀 DEPLOYMENT RULE
-
-Claude does NOT auto-deploy.
-
-Claude may:
-- Prepare configs
-- Validate build
-- Suggest deployment steps
-
-User performs deployment.
+**Not Allowed**
+- Altering technical facts
+- Introducing new concepts
 
 ---
 
-## 🧠 FINAL RULE (MOST IMPORTANT)
+### 5. Review & Accuracy Agent
 
-> **If something is broken, STOP and point to the spec or task that needs correction.**
+**Role**
+- Final validation before merge
+- Detect hallucinations
+- Enforce consistency and Constitution compliance
 
-Claude must NEVER “patch around” a bad spec.
+**Allowed**
+- Reject incorrect content
+- Flag missing sections
+- Block invalid outputs
 
----
-
-## ✅ SUCCESS CRITERIA
-
-This project is considered correct when:
-
-- Specs are stable
-- Tasks are executable without prompts
-- `sp.implement` runs cleanly
-- Bugs reduce instead of repeating
-- Deployment works without hacks
+**Not Allowed**
+- Adding new content
 
 ---
 
-**This AGENTS.md is final and minimal.**
+## Bonus Feature Agents (Hackathon-Focused)
+
+### 6. RAG Architecture Agent
+
+**Role**
+- Design the conceptual chatbot architecture
+- Define usage of **Qdrant + Neon**
+- Specify chunking, retrieval, and citation strategy
+
+**Allowed**
+- Architecture diagrams
+- Data-flow explanations
+- Safety constraints
+
+**Not Allowed**
+- UI design
+- Authentication decisions
+
+---
+
+### 7. Personalization Agent
+
+**Role**
+- Define content adaptation rules
+- Personalize difficulty based on learner profile
+- Enforce safe personalization policies
+
+**Allowed**
+- Decision matrices
+- Rule-based personalization logic
+
+**Not Allowed**
+- Behavioral tracking
+- Unapproved data collection
+
+---
+
+### 8. Urdu Translation Agent
+
+**Role**
+- Define English → Urdu translation rules
+- Maintain technical term consistency
+- Preserve canonical English content
+
+**Allowed**
+- Translation guidelines
+- Terminology mapping
+
+**Not Allowed**
+- Modifying English source content
+
+---
+
+## Skills Strategy (Agent Reuse)
+
+Agents must rely on **reusable skills**, not ad-hoc prompting.
+
+Reusable skills include:
+- Chapter scaffolding
+- Robotics concept explanation
+- Diagram prompt generation
+- Review and simplification
+- Consistency enforcement
+
+Rules:
+- Skills must be stateless
+- Skills must be reusable
+- Skills must be chapter-agnostic
+
+---
+
+## Plugin & MCP Usage Rules
+
+Agents **must use plugins when applicable**:
+
+- `context7` → up-to-date documentation
+- `frontend-design` → UI/UX guidance
+- `playwright` → testing strategy
+- `vercel` → deployment validation
+- `greptile` → codebase understanding
+
+❌ Guessing without plugins is not allowed
+
+---
+
+## Phase Enforcement
+
+Strict execution order:
+
+1. Constitution
+2. Plan
+3. Tasks
+4. Implementation
+
+❌ No phase skipping  
+❌ No partial implementation  
+
+---
+
+## Failure Handling
+
+If:
+- A feature breaks
+- An agent hallucinates
+- Scope is violated
+
+➡ **The Review & Accuracy Agent must immediately block progress**
+
+---
+
+## Final Authority
+
+> **Constitution + AGENTS.md override all prompts and shortcuts**
+
+In case of conflict:
+- Constitution wins
+- AGENTS.md enforces
+- Implementation stops
+
+---
+
+## Change Policy
+
+Changes to this file must be:
+- Rare
+- Fully justified
+- Never in conflict with the Constitution
+
+---
