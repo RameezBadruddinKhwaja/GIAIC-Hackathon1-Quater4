@@ -63,7 +63,7 @@ Answer: """
 
             # Call Google Gemini API to generate the answer
             response = self.model.generate_content(
-                prompt,
+                contents=prompt,
                 generation_config=generation_config,
                 safety_settings={
                     "HARM_CATEGORY_HARASSMENT": "BLOCK_NONE",
