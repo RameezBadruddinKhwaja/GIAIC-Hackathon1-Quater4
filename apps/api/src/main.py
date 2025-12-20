@@ -61,10 +61,8 @@ async def health_check():
     }
 
 # Include routers
-from src.routers.chat import router as chat_router
 from src.routers.codegen import router as codegen_router
 
-app.include_router(chat_router)
 app.include_router(codegen_router)
 
 if __name__ == "__main__":
