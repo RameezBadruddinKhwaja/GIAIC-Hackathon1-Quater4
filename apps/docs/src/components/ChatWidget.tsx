@@ -89,7 +89,8 @@ const ChatWidget: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`API request failed with status ${response.status}. ${errorData.detail || ''}`);
       }
 
       const data: ChatResponse = await response.json();
@@ -98,8 +99,8 @@ const ChatWidget: React.FC = () => {
       const assistantMessage: ChatMessage = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: data.answer,
-        citations: data.citations,
+        content: data.answer || 'No response received',
+        citations: data.citations || [],
         timestamp: new Date(),
       };
 
@@ -111,7 +112,7 @@ const ChatWidget: React.FC = () => {
       const errorMessage: ChatMessage = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        content: `Sorry, I encountered an error processing your request. ${error.message || 'Please try again.'}`,
         timestamp: new Date(),
       };
 
@@ -152,7 +153,8 @@ const ChatWidget: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`API request failed with status ${response.status}. ${errorData.detail || ''}`);
       }
 
       const data: ChatResponse = await response.json();
@@ -161,8 +163,8 @@ const ChatWidget: React.FC = () => {
       const assistantMessage: ChatMessage = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: data.answer,
-        citations: data.citations,
+        content: data.answer || 'No response received',
+        citations: data.citations || [],
         timestamp: new Date(),
       };
 
@@ -174,7 +176,7 @@ const ChatWidget: React.FC = () => {
       const errorMessage: ChatMessage = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        content: `Sorry, I encountered an error processing your request. ${error.message || 'Please try again.'}`,
         timestamp: new Date(),
       };
 
@@ -243,7 +245,7 @@ const ChatWidget: React.FC = () => {
 
       {/* Chat container */}
       {isOpen && (
-        <div className="chat-container">
+        <div className="chat-container" data-theme="light">
           <div className="chat-header">
             <h3>Textbook Assistant</h3>
             <button
@@ -338,7 +340,8 @@ const ChatWidget: React.FC = () => {
           bottom: 80px;
           right: 0;
           width: 400px;
-          height: 600px;
+          max-height: 600px;
+          min-height: 400px;
           background: white;
           border-radius: 20px;
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
@@ -622,11 +625,68 @@ const ChatWidget: React.FC = () => {
           text-decoration: underline;
         }
 
+        /* Dark mode support */
+        .chat-container[data-theme="dark"] {
+          background-color: #1e293b;
+          color: #f1f5f9;
+        }
+
+        .chat-container[data-theme="dark"] .chat-messages {
+          background-color: #0f172a;
+          color: #f1f5f9;
+        }
+
+        .chat-container[data-theme="dark"] .message.assistant .message-content {
+          background-color: #334155;
+          color: #f1f5f9;
+          border-color: #475569;
+        }
+
+        .chat-container[data-theme="dark"] .welcome-message {
+          color: #94a3b8;
+        }
+
+        .chat-container[data-theme="dark"] .message-timestamp {
+          color: #94a3b8;
+        }
+
+        .chat-container[data-theme="dark"] .chat-input-form {
+          background-color: #1e293b;
+          border-top-color: #334155;
+        }
+
+        .chat-container[data-theme="dark"] .chat-input-form input {
+          background-color: #334155;
+          color: #f1f5f9;
+          border-color: #475569;
+        }
+
+        .chat-container[data-theme="dark"] .chat-input-form input::placeholder {
+          color: #94a3b8;
+        }
+
+        .chat-container[data-theme="dark"] .chat-citations {
+          border-top-color: #475569;
+        }
+
+        .chat-container[data-theme="dark"] .citation-title {
+          color: #cbd5e1;
+        }
+
+        .chat-container[data-theme="dark"] .citation-item a {
+          color: #818cf8;
+        }
+
+        .chat-container[data-theme="dark"] .citation-item a:hover {
+          color: #60a5fa;
+        }
+
         @media (max-width: 768px) {
           .chat-container {
             width: 95vw;
             max-width: 95vw;
-            height: 60vh;
+            max-height: 70vh;
+            min-height: 50vh;
             right: 2.5vw;
             bottom: 70px;
           }
@@ -670,6 +730,28 @@ const ChatWidget: React.FC = () => {
 
           .chat-input-form button {
             padding: 0 20px;
+          }
+        }
+
+        /* Better mobile responsiveness to prevent address bar overlap */
+        @media (max-height: 700px) {
+          .chat-container {
+            max-height: 50vh;
+            bottom: 100px;
+          }
+        }
+
+        @media (max-height: 600px) {
+          .chat-container {
+            max-height: 40vh;
+            bottom: 90px;
+          }
+        }
+
+        @media (max-height: 500px) {
+          .chat-container {
+            max-height: 30vh;
+            bottom: 80px;
           }
         }
       `}</style>
