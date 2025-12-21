@@ -1,0 +1,3 @@
+[submodule "PhysicalAITextbook/Physical-AI-Textbook"]
+	path = PhysicalAITextbook/Physical-AI-Textbook
+	url = https://huggingface.co/spaces/rameez12/Physical-AI-Textbook.git
