@@ -76,7 +76,7 @@ Build a production-grade AI-native textbook platform delivering:
 - [X] T054 [P] Create Pydantic models for chatbot data structures
 - [X] T055 [P] Set up FastAPI middleware for request logging and error handling
 - [X] T056 Create vector chunking service for book content
-- [X] T057 Create embedding service using OpenAI text-embedding-3-small
+- [X] T057 Create embedding service using sentence transformers
 
 ### User Story 2 - RAG Chatbot Implementation (US2)
 - [X] T058 [P] [US2] Create RAG service to handle retrieval and generation
