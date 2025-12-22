@@ -29,12 +29,29 @@ const ChatWidget: React.FC = () => {
   const [selectedText, setSelectedText] = useState<string | null>(null);
   const [showSelectionPrompt, setShowSelectionPrompt] = useState(false);
   const [selectionQuestion, setSelectionQuestion] = useState('');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Detect system theme preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    setTheme(mediaQuery.matches ? 'dark' : 'light');
+
+    const handler = (e: MediaQueryListEvent) => {
+      setTheme(e.matches ? 'dark' : 'light');
+    };
+
+    mediaQuery.addEventListener('change', handler);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handler);
+    };
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -266,7 +283,7 @@ const ChatWidget: React.FC = () => {
 
       {/* Chat container */}
       {isOpen && (
-        <div className="chat-container" data-theme="light">
+        <div className="chat-container" data-theme={theme}>
           <div className="chat-header">
             <h3>Textbook Assistant</h3>
             <button
